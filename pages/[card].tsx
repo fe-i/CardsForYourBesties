@@ -12,7 +12,14 @@ const ViewCard: NextPage = () => {
 
 	return (
 		<Layout title="View Card" recipient={decode(router.query.to)}>
-			<Flex justifyContent="center" fontSize="lg" h="100%" p={8}>
+			<Flex
+				alignItems="center"
+				justifyContent="center"
+				fontSize="lg"
+				flexDir="column"
+				gap="1rem"
+				h="100%"
+				p={8}>
 				<DigitalCard
 					recipient={decode(router.query.to)}
 					sender={decode(router.query.from)}

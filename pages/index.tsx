@@ -110,7 +110,7 @@ export default function Home() {
 					<ModalFooter />
 				</ModalContent>
 			</Modal>
-			<Flex alignItems="center" justifyContent="center" flexDir="column" gap="1rem" p={8}>
+			<Flex alignItems="center" justifyContent="center" flexDir="column" h="100%" p={8}>
 				<Heading
 					py={3}
 					display="inline-block"

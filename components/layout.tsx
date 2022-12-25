@@ -8,7 +8,7 @@ const Layout: React.FC<React.PropsWithChildren<{ title?: string; recipient?: str
 	children
 }) => {
 	return (
-		<VStack bgColor="#fff8e8">
+		<VStack bgColor="#fff8e8" h="100vh">
 			<Metadata title={title} recipient={recipient} />
 			{children}
 			<Footer />
