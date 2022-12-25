@@ -2,16 +2,12 @@ import Head from "next/head";
 
 const Metadata: React.FC<{
 	title?: string | undefined;
-	recipient?: string | string[] | undefined;
 	image?: string | undefined;
-}> = ({ title, recipient, image }) => {
+}> = ({ title, image }) => {
 	return (
 		<Head>
 			<title>{(title ? `${title} | ` : "") + "CFYB"}</title>
-			<meta
-				property="og:title"
-				content={recipient ? `A digital card for ${recipient}!` : "Cards For Your Besties"}
-			/>
+			<meta property="og:title" content="Cards For Your Besties" />
 			<meta property="og:type" content="website" />
 			<meta property="og:image" content={image} />
 			<meta

@@ -11,7 +11,7 @@ const ViewCard: NextPage = () => {
 	const router = useRouter();
 
 	return (
-		<Layout title="View Card" recipient={decode(router.query.to)}>
+		<Layout title="View Card" image={router.query.image?.toString()}>
 			<Flex
 				alignItems="center"
 				justifyContent="center"
