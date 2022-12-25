@@ -4,7 +4,7 @@ import Footer from "./footer";
 
 const Layout: React.FC<React.PropsWithChildren<{ title?: string }>> = ({ title, children }) => {
 	return (
-		<VStack bgColor="#fff8e8" h="100vh">
+		<VStack bgColor="#fff8e8" w="full" h="full">
 			<Metadata title={title} />
 			{children}
 			<Footer />

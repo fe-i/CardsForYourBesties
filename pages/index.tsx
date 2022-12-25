@@ -40,8 +40,8 @@ const defaultMessages: any = {
 
 const defaultImages: any = {
 	"": "https://unsplash.com/photos/gdTxVSAE5sk/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8ZmlyZXdvcmtzfGVufDB8fHx8MTY3MTk3ODM4OQ&force=true&w=1920",
-	bd: "https://unsplash.com/photos/Hli3R6LKibo/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjcxOTc4NDc5&force=true&w=1920",
-	cm: "https://unsplash.com/photos/VDXtVYJVj7A/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjcxOTc5NDcy&force=true&w=1920"
+	bd: "https://hips.hearstapps.com/hmg-prod/images/birthday-cake-with-happy-birthday-banner-royalty-free-image-1656616811.jpg",
+	cm: "https://www.history.com/.image/c_fit%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_620/MTY5MDk1MTE5MTgxMTI5NjEw/christmas-traditions-gettyimages-487756624.jpg"
 };
 
 const encode = (str: string): string => Buffer.from(str, "binary").toString("base64");
@@ -122,7 +122,7 @@ export default function Home() {
 				<VStack
 					alignItems="left"
 					spacing="1vh"
-					w="40vw"
+					w="full"
 					borderRadius="xl"
 					p={5}
 					bgColor="white">
@@ -184,8 +184,7 @@ export default function Home() {
 								}
 							}}
 							isDisabled={message.length > 300}
-							width="full"
-							gap={1}>
+							width="full">
 							<IoCreate size={20} />
 							<Text ml="0.3rem">Generate Card</Text>
 							{message.length > 300 ? (
