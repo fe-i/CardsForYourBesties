@@ -19,13 +19,15 @@ import {
 	ModalBody,
 	ModalCloseButton,
 	useDisclosure,
-	Image
+	Image,
+	HStack
 } from "@chakra-ui/react";
 import { IoCreate } from "react-icons/io5";
 import { useState } from "react";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { image } from "googlethis";
 import Link from "next/link";
 import Layout from "../components/layout";
-import { image } from "googlethis";
 
 const findImages: any = async (query: string) => {
 	const images = await image(query, { safe: true }).catch((e) => []);
@@ -62,27 +64,11 @@ export default function Home() {
 		setImage(() => (useTemplate ? defaultImages[e.target.value] : e.target.value));
 	const handleSearch = (e: any) => setSearch(e.target.value);
 
-	const { isOpen: PisOpen, onOpen: PonOpen, onClose: PonClose } = useDisclosure();
-	const { isOpen: FisOpen, onOpen: FonOpen, onClose: FonClose } = useDisclosure();
+	const { isOpen: SisOpen, onOpen: SonOpen, onClose: SonClose } = useDisclosure();
 
 	return (
 		<Layout title="Card Builder">
-			<Modal isOpen={PisOpen} onClose={PonClose} size="xl">
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader textDecor="underline" fontSize="3xl">
-						Image Preview
-					</ModalHeader>
-					<ModalCloseButton size="3xl" p={5} />
-					<ModalBody py={0}>
-						{image !== "" ? (
-							<Image src={image} alt="Image" borderRadius="lg" fit="scale-down" />
-						) : null}
-					</ModalBody>
-					<ModalFooter />
-				</ModalContent>
-			</Modal>
-			<Modal isOpen={FisOpen} onClose={FonClose} size="xl">
+			<Modal isOpen={SisOpen} onClose={SonClose} size="xl">
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader textDecor="underline" fontSize="3xl">
@@ -110,9 +96,16 @@ export default function Home() {
 					<ModalFooter />
 				</ModalContent>
 			</Modal>
-			<Flex alignItems="center" justifyContent="center" flexDir="column" h="100%" p={8}>
+			<Flex
+				alignItems="center"
+				justifyContent="center"
+				flexDir="column"
+				fontSize="lg"
+				h="full"
+				mx={6}
+				my={15}>
 				<Heading
-					py={3}
+					py={5}
 					display="inline-block"
 					fontSize="50px"
 					bgGradient="linear(to-r, cyan.300, cyan.500)"
@@ -121,11 +114,11 @@ export default function Home() {
 				</Heading>
 				<VStack
 					alignItems="left"
-					spacing="1vh"
-					w="full"
+					bgColor="white"
 					borderRadius="xl"
+					w="full"
 					p={5}
-					bgColor="white">
+					spacing="1vh">
 					<FormControl isRequired>
 						<FormLabel>Recipient Name</FormLabel>
 						<Input placeholder="joe" onChange={handleRecipient} />
@@ -141,6 +134,26 @@ export default function Home() {
 							<option value="bd">Birthday</option>
 							<option value="cm">Christmas</option>
 						</Select>
+						<FormLabel>Image URL</FormLabel>
+						<InputGroup gap={5}>
+							<Input
+								placeholder="https://example.com/image.png"
+								value={image}
+								onChange={handleImage}
+							/>
+							<InputRightElement w="fit-content" mr={3} gap={3}>
+								<Button h={8} onClick={SonOpen}>
+									{image.match(/\.(jpeg|jpg|gif|png)$/) === null
+										? "Find"
+										: "Change"}
+								</Button>
+								{image.match(/\.(jpeg|jpg|gif|png)$/) !== null ? (
+									<CheckIcon color="green.500" />
+								) : (
+									<CloseIcon color="red.500" />
+								)}
+							</InputRightElement>
+						</InputGroup>
 						<FormLabel>Message</FormLabel>
 						<Textarea
 							resize="none"
@@ -149,25 +162,6 @@ export default function Home() {
 							onChange={handleMessage}
 							value={message}
 						/>
-						<FormLabel>Image URL</FormLabel>
-						<InputGroup>
-							<Input
-								placeholder="https://example.com/image.png"
-								value={image}
-								onChange={handleImage}
-								isDisabled
-							/>
-							<InputRightElement w="fit-content" mr={2} gap={1}>
-								{image !== "" ? (
-									<Button h="1.75rem" onClick={PonOpen}>
-										Show
-									</Button>
-								) : null}
-								<Button h="1.75rem" onClick={FonOpen}>
-									{image === "" ? "Add" : "Change"}
-								</Button>
-							</InputRightElement>
-						</InputGroup>
 					</FormControl>
 					{recipient === "" || sender === "" || message === "" || image === "" ? (
 						<Button isLoading loadingText="Awaiting input..." colorScheme="yellow" />
@@ -183,12 +177,12 @@ export default function Home() {
 									image: image
 								}
 							}}
-							isDisabled={message.length > 300}
-							width="full">
+							isDisabled={message.length > 500}
+							w="full">
 							<IoCreate size={20} />
-							<Text ml="0.3rem">Generate Card</Text>
-							{message.length > 300 ? (
-								<Text>(Message is longer than 300 characters)</Text>
+							<Text ml={0.5}>Create Card</Text>
+							{message.length > 500 ? (
+								<Text>(Message is longer than 500 characters)</Text>
 							) : null}
 						</Button>
 					)}

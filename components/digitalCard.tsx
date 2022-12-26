@@ -8,21 +8,20 @@ const DigitalCard: React.FC<{
 }> = ({ recipient, sender, message, image }) => {
 	return (
 		<VStack
-			maxW="445px"
 			bg={useColorModeValue("white", "gray.900")}
-			boxShadow="2xl"
 			borderRadius="xl"
-			overflow="hidden"
-			p={6}>
-			<VStack mt={-6} mx={-6} mb={6} pos="relative">
-				<Image src={image} alt="Image" />
+			boxShadow="2xl"
+			maxW="450px"
+			alignItems="left"
+			p={5}
+			px={6}>
+			<VStack mx={-6} mt={-5} mb={2} position="relative">
+				<Image borderTopRadius="xl" src={image} alt="Image" />
 			</VStack>
-			<VStack alignItems="left" py={4} spacing={0}>
-				<Text>Dear {recipient},</Text>
-				<Text py={4}>{message}</Text>
-				<Text>Lots of love,</Text>
-				<Text>{sender} ♡</Text>
-			</VStack>
+			<Text>Dear {recipient},</Text>
+			<Text py={4}>{message}</Text>
+			<Text>Lots of love,</Text>
+			<Text>{sender} ♡</Text>
 		</VStack>
 	);
 };

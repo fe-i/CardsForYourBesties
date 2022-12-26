@@ -1,4 +1,4 @@
-import { Button, Flex, useClipboard } from "@chakra-ui/react";
+import { Flex, VStack, Button, useClipboard } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -18,16 +18,25 @@ const ViewCard: NextPage = () => {
 
 	return (
 		<Layout title="View Card">
-			<Flex alignItems="center" justifyContent="center" fontSize="lg" flexDir="column" p={8}>
-				<DigitalCard
-					recipient={decode(router.query.to)}
-					sender={decode(router.query.from)}
-					message={decode(router.query.message)}
-					image={router.query.image?.toString()}
-				/>
-				<Button bgColor="gray.300" w="full" onClick={onCopy} mt={5}>
-					{hasCopied ? "Copied!" : "Copy Link To Share"}
-				</Button>
+			<Flex
+				alignItems="center"
+				justifyContent="center"
+				flexDir="column"
+				fontSize="lg"
+				h="full"
+				mx={6}
+				my={15}>
+				<VStack spacing={10}>
+					<DigitalCard
+						recipient={decode(router.query.to)}
+						sender={decode(router.query.from)}
+						message={decode(router.query.message)}
+						image={router.query.image?.toString()}
+					/>
+					<Button bgColor="white" w="full" onClick={onCopy}>
+						{hasCopied ? "Copied!" : "Copy Link To Share"}
+					</Button>
+				</VStack>
 			</Flex>
 		</Layout>
 	);
