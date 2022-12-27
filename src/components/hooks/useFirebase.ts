@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { getApp, initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDoc, DocumentReference } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
@@ -20,7 +20,7 @@ initializeApp({
 });
 
 const db = collection(getFirestore(), "cards");
-const storage = getStorage();
+const storage = getStorage(getApp(), STORAGE_BUCKET);
 
 const useFirebase = () => {
 	const write = async (data: object) => {
