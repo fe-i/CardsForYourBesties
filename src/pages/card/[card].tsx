@@ -2,8 +2,8 @@ import { Flex, Button, useClipboard } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Card from "../../components/card";
-import Layout from "../../components/layout";
+import Card from "../../../src/components/card";
+import Layout from "../../../src/components/layout";
 
 const decode = (str: string | string[] | undefined): string =>
 	Buffer.from(new String(str), "base64").toString("binary");

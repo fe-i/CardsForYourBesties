@@ -1,8 +1,8 @@
 import { Flex, Heading } from "@chakra-ui/react";
 import { useState } from "react";
-import Layout from "../components/layout";
-import CreateForm from "../components/createForm";
-import Card from "../components/card";
+import Layout from "../../src/components/layout";
+import CreateForm from "../../src/components/createForm";
+import Card from "../../src/components/card";
 
 const encode = (str: string): string => Buffer.from(str, "binary").toString("base64");
 
