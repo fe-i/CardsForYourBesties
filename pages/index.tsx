@@ -15,9 +15,8 @@ export default function Home() {
 	});
 
 	return (
-		//TODO: MAKE FLEX WRAP/BECOME ROW FLEX WHEN MOBILE
 		<Layout title="Card Builder">
-			<Flex flexDir="column" align="center" justify="center" fontSize="lg" gap={5} py={6}>
+			<Flex flexDir="column" align="center" justify="center" gap={6} pb={8}>
 				<Heading
 					display="inline-block"
 					fontSize="50px"
@@ -26,7 +25,7 @@ export default function Home() {
 					pb={6}>
 					Send your besties a digital card!
 				</Heading>
-				<Flex flexDir="row" fontSize="lg" gap={5}>
+				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
 					<CreateForm setCard={setCard} />
 					<Card
 						recipient={card?.recipient}

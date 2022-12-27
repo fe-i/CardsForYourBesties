@@ -18,7 +18,7 @@ const ViewCard: NextPage = () => {
 
 	return (
 		<Layout title="View Card">
-			<Flex flexDir="column" align="center" justify="center" fontSize="lg" gap={5} py={6}>
+			<Flex flexDir="column" align="center" justify="center" fontSize="lg" gap={5} py={8}>
 				<Card
 					recipient={decode(router.query.to)}
 					sender={decode(router.query.from)}
