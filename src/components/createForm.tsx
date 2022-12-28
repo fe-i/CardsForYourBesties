@@ -39,9 +39,9 @@ const options = [
 
 const CreateForm: React.FC<{ setCard: any }> = ({ setCard }) => {
 	const { write, upload } = useFirebase();
-	const [recipient, setRecipient] = useState<string | undefined>("joe");
-	const [sender, setSender] = useState<string | undefined>("mama");
-	const [message, setMessage] = useState<string | undefined>("This is a demo.");
+	const [recipient, setRecipient] = useState<string | undefined>("");
+	const [sender, setSender] = useState<string | undefined>("");
+	const [message, setMessage] = useState<string | undefined>("");
 	const [image, setImage] = useState<File | null>(null);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
