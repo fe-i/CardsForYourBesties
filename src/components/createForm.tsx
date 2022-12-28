@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { IoCreate } from "react-icons/io5";
-import useFirebase from "./hooks/useFirebase";
+import useFirebase from "../hooks/useFirebase";
 
 const options = [
 	//TODO: template images need to become file objects
