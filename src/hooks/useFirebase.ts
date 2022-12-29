@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDoc, DocumentReference } from "firebase/firestore";
+import { getFirestore, collection, doc, addDoc, getDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
 	API_KEY,
@@ -19,28 +19,35 @@ initializeApp({
 	appId: APP_ID
 });
 
-const db = collection(getFirestore(), "cards");
+const docs = collection(getFirestore(), "cards");
 const storage = getStorage();
 
 const useFirebase = () => {
 	const write = async (data: object) => {
-		await addDoc(db, data)
-			.then((ref: any) => {
-				console.log(`Document ${ref.id} written successfully.`);
+		await addDoc(docs, data)
+			.then((doc: any) => {
+				console.log(`Document ${doc.id} written successfully.`);
 			})
 			.catch((e: any) => {
-				console.error(`Error writing to cards: ${e}`);
+				console.error(`Error writing to collection: ${e}`);
 			});
 	};
 
-	const read = async (ref: DocumentReference) => {
-		//TODO: make viewcard page work
-		await getDoc(ref)
-			.then((ref: any) => {
-				console.log(`Document ${ref}.`);
+	const read = (id: string) => {
+		//TOOD: doesn't work
+		return getDoc(doc(docs, id))
+			.then((doc: any) => {
+				console.log(`Document ${doc.id} found successfully.`);
+				return doc.data();
 			})
 			.catch((e: any) => {
-				console.error(`Error reading from cards: ${e}`);
+				console.error(`Error reading from collection: ${e}`);
+				return {
+					recipient: "recipient",
+					sender: "sender",
+					message: "your message here",
+					image: "image.png"
+				};
 			});
 	};
 

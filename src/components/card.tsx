@@ -1,10 +1,10 @@
 import { Flex, Image, Text, useColorModeValue } from "@chakra-ui/react";
 
 const Card: React.FC<{
-	recipient: string | undefined;
-	sender: string | undefined;
-	message: string | undefined;
-	image: string | undefined;
+	recipient: string;
+	sender: string;
+	message: string;
+	image: string;
 }> = ({ recipient, sender, message, image }) => {
 	return (
 		<Flex

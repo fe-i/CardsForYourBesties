@@ -7,10 +7,15 @@ import Card from "../../src/components/card";
 const encode = (str: string): string => Buffer.from(str, "binary").toString("base64");
 
 export default function Home() {
-	const [card, setCard] = useState({
-		recipient: "joe",
-		sender: "mama",
-		message: "This is a demo.",
+	const [card, setCard] = useState<{
+		recipient: string;
+		sender: string;
+		message: string;
+		image: string;
+	}>({
+		recipient: "recipient",
+		sender: "sender",
+		message: "your message here",
 		image: "image.png"
 	});
 
@@ -26,12 +31,12 @@ export default function Home() {
 					Send your besties a digital card!
 				</Heading>
 				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
-					<CreateForm setCard={setCard} />
+					<CreateForm card={card} setCard={setCard} />
 					<Card
-						recipient={card?.recipient}
-						sender={card?.sender}
-						message={card?.message}
-						image={card?.image}
+						recipient={card.recipient}
+						sender={card.sender}
+						message={card.message}
+						image={card.image}
 					/>
 				</Flex>
 			</Flex>

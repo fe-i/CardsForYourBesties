@@ -2,23 +2,21 @@ import {
 	Button,
 	Flex,
 	FormControl,
-	FormErrorMessage,
 	FormLabel,
 	Input,
-	InputGroup,
 	Select,
 	Text,
 	Textarea,
 	useColorModeValue,
+	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
 import { IoCreate } from "react-icons/io5";
 import useFirebase from "../hooks/useFirebase";
+import ImageModal from "./imageModal";
 
 const options = [
-	//TODO: template images need to become file objects
 	{
 		name: "none",
 		message: "",
@@ -37,21 +35,22 @@ const options = [
 	}
 ];
 
-const CreateForm: React.FC<{ setCard: any }> = ({ setCard }) => {
+const CreateForm: React.FC<{
+	card: {
+		recipient: string;
+		sender: string;
+		message: string;
+		image: string;
+	};
+	setCard: any;
+}> = ({ setCard }) => {
 	const { write, upload } = useFirebase();
-	const [recipient, setRecipient] = useState<string | undefined>("");
-	const [sender, setSender] = useState<string | undefined>("");
-	const [message, setMessage] = useState<string | undefined>("");
-	const [image, setImage] = useState<File | null>(null);
+	const [recipient, setRecipient] = useState<string>("");
+	const [sender, setSender] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
+	const [image, setImage] = useState<File | string | null>("");
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		accept: { "image/*": [] },
-		maxFiles: 1,
-		onDrop: (acceptedFiles: any, fileRejections: any) => {
-			if (!!fileRejections.length) return toast("That's not a valid image!", "error");
-			setImage(acceptedFiles[0]);
-		}
-	});
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const toastHook = useToast();
 	const toast = (description: string, status: any) =>
@@ -64,6 +63,22 @@ const CreateForm: React.FC<{ setCard: any }> = ({ setCard }) => {
 			isClosable: true
 		});
 
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+
+		if (!recipient || !sender || !message)
+			return toast("Please fill in the required fields!", "error");
+
+		let url;
+		if (image instanceof File) url = await upload(image);
+		else if (typeof image === "string" && image) url = image;
+		else return toast("Please provide an image!", "error");
+
+		await write({ recipient, sender, message, image: url });
+		await setCard({ recipient, sender, message, image: url });
+		toast("Created successfully!", "success");
+	};
+
 	return (
 		<Flex
 			flexDir="column"
@@ -74,118 +89,80 @@ const CreateForm: React.FC<{ setCard: any }> = ({ setCard }) => {
 			gap={2}
 			px={6}
 			py={6}>
-			<FormControl isInvalid={!recipient || recipient.length > 50} isRequired>
-				<FormLabel>Recipient Name</FormLabel>
-				<Input
-					placeholder="recipient"
-					onChange={(e) => setRecipient(e.target.value)}
-					value={recipient}
-				/>
-				{!recipient || recipient.length > 50 ? (
-					<FormErrorMessage>Enter a valid recipient name.</FormErrorMessage>
-				) : null}
-			</FormControl>
-
-			<FormControl isInvalid={!sender || sender.length > 50} isRequired>
-				<FormLabel>Sender Name</FormLabel>
-				<Input
-					placeholder="sender"
-					onChange={(e) => setSender(e.target.value)}
-					value={sender}
-				/>
-				{!sender || sender.length > 50 ? (
-					<FormErrorMessage>Enter a valid sender name.</FormErrorMessage>
-				) : null}
-			</FormControl>
-
-			<FormControl>
-				<FormLabel>Template</FormLabel>
-				<Select
-					onChange={(e) => {
-						setMessage(options.find((o) => o.name === e.target.value)?.message);
-						//setImage(options.find((o) => o.name === e.target.value).image);
-					}}>
-					{options.map((_, i) => (
-						<option key={i} value={_.name}>
-							{_.name}
-						</option>
-					))}
-				</Select>
-			</FormControl>
-
-			<FormControl isInvalid={!message || message.length > 500} isRequired>
-				<FormLabel>Message</FormLabel>
-				<Textarea
-					placeholder="your message here"
-					resize="none"
-					h="15vh"
-					onChange={(e) => setMessage(e.target.value)}
-					value={message}
-				/>
-				{!message || message.length > 500 ? (
-					<FormErrorMessage>
-						Messages must be between 1 and 500 characters.
-					</FormErrorMessage>
-				) : null}
-			</FormControl>
-
-			<FormControl isInvalid={image === null} isRequired>
-				<FormLabel>Image</FormLabel>
-				<Flex
-					align="center"
-					justify="center"
-					borderWidth={image === null ? 2 : 1}
-					borderColor={image === null ? "red.500" : "gray.200"}
-					borderRadius="lg"
-					fontSize="md"
-					h="2.5rem"
-					gap={2}
-					pl={4}
-					pr={2}>
-					<InputGroup {...getRootProps()}>
-						<input {...getInputProps()} />
-						<Text textColor="gray.500">
-							{isDragActive
-								? "drop the image here"
-								: image === null
-								? "drag or click to upload an image"
-								: `selected ` + image?.name}
+			<ImageModal isOpen={isOpen} onClose={onClose} setImage={setImage} />
+			<form onSubmit={handleSubmit}>
+				<FormControl pb={5}>
+					<FormLabel>Template</FormLabel>
+					<Select
+						onChange={async (e) => {
+							const option = options.find((o) => o.name === e.target.value);
+							if (!option) return;
+							setMessage(option.message);
+							setImage(option.image);
+						}}>
+						{options.map((_, i) => (
+							<option key={i} value={_.name}>
+								{_.name}
+							</option>
+						))}
+					</Select>
+				</FormControl>
+				<FormControl isInvalid={!recipient} isRequired>
+					<FormLabel>Recipient Name</FormLabel>
+					<Input
+						placeholder="recipient"
+						maxLength={50}
+						onChange={(e) => setRecipient(e.target.value)}
+						value={recipient}
+					/>
+				</FormControl>
+				<FormControl isInvalid={!sender} isRequired>
+					<FormLabel>Sender Name</FormLabel>
+					<Input
+						placeholder="sender"
+						maxLength={50}
+						onChange={(e) => setSender(e.target.value)}
+						value={sender}
+					/>
+				</FormControl>
+				<FormControl isInvalid={!message} isRequired>
+					<FormLabel>Message</FormLabel>
+					<Textarea
+						placeholder="your message here"
+						resize="none"
+						h="15vh"
+						maxLength={500}
+						onChange={(e) => setMessage(e.target.value)}
+						value={message}
+					/>
+				</FormControl>
+				<FormControl isRequired>
+					<FormLabel>Image</FormLabel>
+					<Flex
+						align="center"
+						justify="space-between"
+						borderWidth={!image ? 2 : 1}
+						borderColor={!image ? "red.500" : "gray.200"}
+						borderRadius="md"
+						h="2.5rem"
+						pl={4}
+						pr={2}>
+						<Text textColor="gray.500" fontSize="md">
+							{image
+								? typeof image !== "string"
+									? image.name
+									: "image from url"
+								: "no image selected"}
 						</Text>
-					</InputGroup>
-					{
-						/*TODO: FIX UPLOAD WITH URL BUTTON*/ image === null && (
-							<Button h="1.5rem" onClick={() => {}}>
-								Use URL
-							</Button>
-						)
-					}
-					{image !== null && (
-						<Button h="1.5rem" onClick={() => setImage(null)}>
-							Remove
+						<Button h="1.5rem" onClick={onOpen}>
+							{image ? "Change Image" : "Choose Image"}
 						</Button>
-					)}
-				</Flex>
-				<FormErrorMessage>Select a valid image.</FormErrorMessage>
-			</FormControl>
-
-			<Button
-				mt={5}
-				onClick={async () => {
-					if (!recipient) toast("Recipient field is invalid.", "error");
-					else if (!sender) toast("Sender field is invalid.", "error");
-					else if (!message || message.length > 500)
-						toast("Message must be between 1 and 500 characters.", "error");
-					else if (image === null) toast("Image field is invalid.", "error");
-					else {
-						const imageURL = await upload(image);
-						await setCard({ recipient, sender, message, image: imageURL });
-						//await write({ recipient, sender, message, image: imageURL }); //TODO: undo comment
-						toast("Your card has been made successfully.", "success");
-					}
-				}}>
-				<IoCreate size={20} />
-				<Text ml={0.5}>Create Card</Text>
-			</Button>
+					</Flex>
+				</FormControl>
+				<Button type="submit" leftIcon={<IoCreate size={20} />} mt={4} w="full">
+					Create Card
+				</Button>
+			</form>
 		</Flex>
 	);
 };
