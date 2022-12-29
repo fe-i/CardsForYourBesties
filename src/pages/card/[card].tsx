@@ -26,7 +26,7 @@ const ViewCard: NextPage = () => {
 	});
 
 	useEffect(() => {
-		if (query.id) setCard(read("i79CocXj5xIxEIBKv2VO")); //TODO: doesn't work
+		//if (query.id) setCard(read("i79CocXj5xIxEIBKv2VO")); //TODO: doesn't work
 		setValue(window.location.toString());
 	}, [query]);
 
