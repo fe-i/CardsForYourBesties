@@ -24,37 +24,32 @@ const storage = getStorage();
 
 const useFirebase = () => {
 	const write = async (data: object) => {
-		await addDoc(docs, data)
-			.then((doc: any) => {
-				console.log(`Document ${doc.id} written successfully.`);
-			})
-			.catch((e: any) => {
-				console.error(`Error writing to collection: ${e}`);
-			});
+		try {
+			const docRef = await addDoc(docs, data);
+			console.log(`Document written with ID: ${docRef.id}`);
+			return docRef.id;
+		} catch (e) {
+			console.error("Error adding document: ", e);
+			return;
+		}
 	};
 
-	const read = (id: string) => {
-		//TOOD: doesn't work
-		return getDoc(doc(docs, id))
-			.then((doc: any) => {
-				console.log(`Document ${doc.id} found successfully.`);
-				return doc.data();
-			})
-			.catch((e: any) => {
-				console.error(`Error reading from collection: ${e}`);
-				return {
-					recipient: "recipient",
-					sender: "sender",
-					message: "your message here",
-					image: "image.png"
-				};
-			});
+	const read = async (id: string) => {
+		const docRef = doc(docs, id);
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			console.log(`Document found with ID: ${docSnap.id}`);
+			return docSnap.data();
+		} else {
+			console.error("Document not found!");
+			return;
+		}
 	};
 
 	const upload = async (image: File) => {
-		const reference = ref(storage, /*image.name*/ Math.random().toString(36).substring(2, 15)); //TODO: random image name
-		const snapshot = await uploadBytes(reference, image);
-		return await getDownloadURL(snapshot.ref);
+		const storageRef = ref(storage, /*image.name*/ Math.random().toString(36).substring(2, 15)); //TODO: random image name
+		const storageSnap = await uploadBytes(storageRef, image);
+		return await getDownloadURL(storageSnap.ref);
 	};
 
 	return { write, read, upload };

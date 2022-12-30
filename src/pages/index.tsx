@@ -4,8 +4,6 @@ import Layout from "../../src/components/layout";
 import CreateForm from "../../src/components/createForm";
 import Card from "../../src/components/card";
 
-const encode = (str: string): string => Buffer.from(str, "binary").toString("base64");
-
 export default function Home() {
 	const [card, setCard] = useState<{
 		recipient: string;
@@ -16,7 +14,7 @@ export default function Home() {
 		recipient: "recipient",
 		sender: "sender",
 		message: "your message here",
-		image: "image.png"
+		image: "/image.png"
 	});
 
 	return (

@@ -11,6 +11,7 @@ import {
 	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useState } from "react";
 import { IoCreate } from "react-icons/io5";
 import useFirebase from "../hooks/useFirebase";
@@ -74,7 +75,9 @@ const CreateForm: React.FC<{
 		else if (typeof image === "string" && image) url = image;
 		else return toast("Please provide an image!", "error");
 
-		await write({ recipient, sender, message, image: url });
+		await write({ recipient, sender, message, image: url }).then((id: any) =>
+			alert("https://cfyb.vercel.app/view/" + id)
+		);
 		await setCard({ recipient, sender, message, image: url });
 		toast("Created successfully!", "success");
 	};
