@@ -150,7 +150,7 @@ const CreateForm: React.FC<{
 						h="2.5rem"
 						pl={4}
 						pr={2}>
-						<Text textColor="gray.500" fontSize="md" text-overflow="clip">
+						<Text textColor="gray.500" fontSize="md">
 							{image
 								? typeof image !== "string"
 									? image.name
