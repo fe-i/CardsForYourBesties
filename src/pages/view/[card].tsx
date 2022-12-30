@@ -1,4 +1,4 @@
-import { Flex, Button, useClipboard, Spinner, Text } from "@chakra-ui/react";
+import { Flex, Text, Spinner, Button, useClipboard } from "@chakra-ui/react";
 import { DocumentData } from "@firebase/firestore";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
