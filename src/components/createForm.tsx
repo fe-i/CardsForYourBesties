@@ -76,7 +76,7 @@ const CreateForm: React.FC<{
 		else return toast("Please provide an image!", "error");
 
 		await write({ recipient, sender, message, image: url }).then((id: any) =>
-			alert("https://cfyb.vercel.app/view/" + id)
+			alert("https://cfyb.vercel.app/view/?id=" + id)
 		);
 		await setCard({ recipient, sender, message, image: url });
 		toast("Created successfully!", "success");
