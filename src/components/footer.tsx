@@ -2,7 +2,7 @@ import { Flex, Text } from "@chakra-ui/react";
 
 const Footer: React.FC = () => {
 	return (
-		<Flex flexDir="column" align="center" mt="auto">
+		<Flex flexDir="column" align="center" mt="auto" mb={8}>
 			<Text fontWeight="semibold">© 2022 Cards For Your Besties. All rights reserved.</Text>
 		</Flex>
 	);
