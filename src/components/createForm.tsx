@@ -11,9 +11,9 @@ import {
 	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useState } from "react";
 import { IoCreate } from "react-icons/io5";
+import Router from "next/router";
 import useFirebase from "../hooks/useFirebase";
 import ImageModal from "./imageModal";
 
@@ -67,17 +67,14 @@ const CreateForm: React.FC<{
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
-		if (!recipient || !sender || !message)
-			return toast("Please fill in the required fields!", "error");
-
 		let url;
 		if (image instanceof File) url = await upload(image);
 		else if (typeof image === "string" && image) url = image;
 		else return toast("Please provide an image!", "error");
 
-		await write({ recipient, sender, message, image: url }).then((id: any) =>
-			alert("https://cfyb.vercel.app/view/card?id=" + id)
-		);
+		await write({ recipient, sender, message, image: url }).then((id: any) => {
+			Router.push(`/view/card?id=${id}`);
+		});
 		await setCard({ recipient, sender, message, image: url });
 		toast("Created successfully!", "success");
 	};
