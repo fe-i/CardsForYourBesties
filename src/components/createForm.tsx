@@ -11,9 +11,9 @@ import {
 	useDisclosure,
 	useToast
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCreate } from "react-icons/io5";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import useFirebase from "../hooks/useFirebase";
 import ImageModal from "./imageModal";
 
@@ -44,25 +44,28 @@ const CreateForm: React.FC<{
 		image: string;
 	};
 	setCard: any;
-}> = ({ setCard }) => {
+}> = ({ card, setCard }) => {
+	const router = useRouter();
 	const { write, upload } = useFirebase();
-	const [recipient, setRecipient] = useState<string>("");
-	const [sender, setSender] = useState<string>("");
-	const [message, setMessage] = useState<string>("");
-	const [image, setImage] = useState<File | string | null>("");
-
+	const [recipient, setRecipient] = useState<string>(card.recipient);
+	const [sender, setSender] = useState<string>(card.sender);
+	const [message, setMessage] = useState<string>(card.message);
+	const [image, setImage] = useState<File | string | null>(card.image);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const toastHook = useToast();
-	const toast = (description: string, status: any) =>
-		toastHook({
-			title: "Card Builder",
-			description,
-			status,
-			duration: 4000,
-			position: "top-right",
-			isClosable: true
-		});
+	const toast = (description: string, status: any) => {
+		if (!toastHook.isActive("toast"))
+			toastHook({
+				id: "toast",
+				title: "Card Builder",
+				description,
+				status,
+				duration: 4000,
+				position: "top-right",
+				isClosable: true
+			});
+	};
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -72,12 +75,15 @@ const CreateForm: React.FC<{
 		else if (typeof image === "string" && image) url = image;
 		else return toast("Please provide an image!", "error");
 
-		await write({ recipient, sender, message, image: url }).then((id: any) => {
-			Router.push(`/view/card?id=${id}`);
-		});
-		await setCard({ recipient, sender, message, image: url });
-		toast("Created successfully!", "success");
+		await write({ recipient, sender, message, image: url }).then((id: any) =>
+			router.push(`/view/card?id=${id}`)
+		);
+		return toast("Created successfully!", "success");
 	};
+
+	useEffect(() => {
+		setCard({ recipient, sender, message, image });
+	}, [recipient, sender, message, image]);
 
 	return (
 		<Flex

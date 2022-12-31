@@ -29,8 +29,8 @@ const useFirebase = () => {
 			console.log(`Document written with ID: ${docRef.id}`);
 			return docRef.id;
 		} catch (e) {
-			console.error("Error adding document: ", e);
-			return;
+			console.error(`Error adding document: ${e}`);
+			return undefined;
 		}
 	};
 
@@ -42,7 +42,7 @@ const useFirebase = () => {
 			return docSnap.data();
 		} else {
 			console.error("Document not found!");
-			return;
+			return undefined;
 		}
 	};
 

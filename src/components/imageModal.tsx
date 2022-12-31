@@ -14,7 +14,8 @@ import {
 	InputGroup,
 	InputLeftAddon,
 	Input,
-	Button
+	Button,
+	useToast
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
@@ -40,6 +41,39 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 	onClose,
 	setImage
 }) => {
+	const toastHook = useToast();
+	const toast = (description: string, status: any) => {
+		if (!toastHook.isActive("toast"))
+			toastHook({
+				id: "toast",
+				title: "Card Builder",
+				description,
+				status,
+				duration: 4000,
+				position: "top-right",
+				isClosable: true
+			});
+	};
+
+	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+		accept: { "image/*": [] },
+		maxFiles: 1,
+		onDrop: (acceptedFiles: any, fileRejections: any) => {
+			if (!!fileRejections.length) return;
+			setImage(acceptedFiles[0]);
+		}
+	});
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+
+		const url = e.target[0].value?.replace(/^https?:\/\//, "");
+		if (isURL(url) && (await imageFromURL(url))) {
+			setImage(`https://${url}`);
+			return toast("Image added from URL!", "success");
+		} else return toast("Error getting image from URL!", "error");
+	};
+
 	useEffect(() => {
 		document.onpaste = (e) => {
 			const items = e.clipboardData?.items;
@@ -50,17 +84,9 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 
 			const file = image.getAsFile();
 			setImage(file);
+			toast("Image added from clipboard!", "success");
 		};
 	}, []);
-
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		accept: { "image/*": [] },
-		maxFiles: 1,
-		onDrop: (acceptedFiles: any, fileRejections: any) => {
-			if (!!fileRejections.length) return;
-			setImage(acceptedFiles[0]);
-		}
-	});
 
 	return (
 		<Modal blockScrollOnMount={true} isOpen={isOpen} onClose={onClose} isCentered>
@@ -105,19 +131,12 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 								</InputGroup>
 							</TabPanel>
 							<TabPanel>
-								<form
-									onSubmit={async (e: any) => {
-										e.preventDefault();
-
-										const url = e.target[0].value?.replace(/^https?:\/\//, "");
-										if (isURL(url) && (await imageFromURL(url)))
-											setImage(`https://${url}`);
-									}}>
+								<form onSubmit={handleSubmit}>
 									<InputGroup justifyContent="center" py={10}>
 										<InputLeftAddon>https://</InputLeftAddon>
 										<Input type="string" placeholder="image url" />
 										<Button type="submit" ml={1}>
-											Save
+											Add
 										</Button>
 									</InputGroup>
 								</form>
