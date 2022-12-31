@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Home: NextPage = () => {
 	return (
-		<Layout title="Card Builder">
+		<Layout title="Home">
 			<Flex flexDir="column" align="center" justify="center" gap={6} my={200}>
 				<Heading
 					fontFamily="mono"

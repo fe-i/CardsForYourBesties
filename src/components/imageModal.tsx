@@ -100,7 +100,7 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 									<Text textAlign="center">
 										{isDragActive
 											? "drop the image here"
-											: "drop the image here or click to upload an image"}
+											: "drop or paste the image here or click to upload an image"}
 									</Text>
 								</InputGroup>
 							</TabPanel>
