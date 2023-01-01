@@ -16,11 +16,13 @@ const Card: React.FC<{
 			px={6}
 			py={6}>
 			<Flex mx={-6} mt={-6} mb={4}>
-				<Image borderTopRadius="xl" src={image} fallbackSrc="image.png" alt="Image" />
+				<Image borderTopRadius="xl" src={image} fallbackSrc="/image.png" alt="Image" />
 			</Flex>
 			<Flex flexDir="column">
 				<Text>Dear {recipient},</Text>
-				<Text py={4}>{message}</Text>
+				<Text py={4} whiteSpace="pre-wrap">
+					{message}
+				</Text>
 				<Text>Lots of love,</Text>
 				<Text>{sender} ♡</Text>
 			</Flex>
