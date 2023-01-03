@@ -1,10 +1,8 @@
 import { Flex, Text, Spinner, Button, useClipboard } from "@chakra-ui/react";
 import { DocumentData } from "@firebase/firestore";
-import Fireworks from "@fireworks-js/react";
-import type { FireworksHandlers } from "@fireworks-js/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../components/card";
 import Layout from "../../components/layout";
 import useFirebase from "../../hooks/useFirebase";
@@ -20,34 +18,9 @@ const ViewCard: NextPage = () => {
 		setValue(window.location.toString());
 	}, [query]);
 
-	const ref = useRef<FireworksHandlers>(null);
-
-	const toggle = () => {
-		if (!ref.current) return;
-		if (ref.current.isRunning) {
-			ref.current.stop();
-		} else {
-			ref.current.start();
-		}
-	};
-
 	return (
 		<Layout title="View Card">
-			<Flex pointerEvents="none">
-				<Fireworks
-					ref={ref}
-					options={{ opacity: 0.2, traceSpeed: 5, intensity: 40 }}
-					style={{
-						top: 0,
-						left: 0,
-						width: "100%",
-						height: "100%",
-						position: "fixed"
-					}}
-				/>
-			</Flex>
 			<Flex flexDir="column" align="center" justify="center" fontSize="lg" gap={5} py={8}>
-				<Button onClick={toggle}>Toggle Fireworks</Button>
 				{card ? (
 					<>
 						<Card
@@ -56,7 +29,7 @@ const ViewCard: NextPage = () => {
 							message={card.message}
 							image={card.image}
 						/>
-						<Button bgColor="white" w="auto" onClick={onCopy}>
+						<Button w="auto" onClick={onCopy}>
 							{hasCopied ? "Copied!" : "Copy Link To Share"}
 						</Button>
 					</>

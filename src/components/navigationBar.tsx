@@ -3,7 +3,6 @@ import {
 	Heading,
 	Image,
 	Text,
-	Link,
 	Button,
 	Avatar,
 	Menu,
@@ -12,6 +11,7 @@ import {
 	MenuItem,
 	MenuDivider
 } from "@chakra-ui/react";
+import Link from "next/link";
 
 const NavigationBar: React.FC = () => {
 	return (
@@ -21,7 +21,7 @@ const NavigationBar: React.FC = () => {
 					<Image w={12} alt="Logo" src="/mail.png" />
 					<Heading
 						display="inline-block"
-						bgGradient="linear(to-r, cyan.400, cyan.600)"
+						bgGradient="linear(to-r, green.300, green.400)"
 						backgroundClip="text">
 						CFYB
 					</Heading>

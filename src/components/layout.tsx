@@ -1,16 +1,16 @@
-import { Box, Flex, VStack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import Metadata from "./metadata";
-import Footer from "./footer";
 import NavigationBar from "./navigationBar";
+import Footer from "./footer";
 
 const Layout: React.FC<React.PropsWithChildren<{ title?: string }>> = ({ title, children }) => {
 	return (
-		<Box w="100vw" h="100vh" overflowX="hidden" overflowY="scroll">
+		<Flex flexDir="column" overflowX="hidden" overflowY="auto">
 			<Metadata title={title} />
 			<NavigationBar />
-			<Flex flexDir="column">{children}</Flex>
+			{children}
 			<Footer />
-		</Box>
+		</Flex>
 	);
 };
 
