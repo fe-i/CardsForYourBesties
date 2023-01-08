@@ -9,12 +9,12 @@ import useFirebase from "../../hooks/useFirebase";
 
 const ViewCard: NextPage = () => {
 	const { query } = useRouter();
-	const { read } = useFirebase();
+	const { read, cards } = useFirebase();
 	const [card, setCard] = useState<DocumentData | null | undefined>(null);
 	const { onCopy, setValue, hasCopied } = useClipboard("");
 
 	useEffect(() => {
-		if (query.id) read(query.id.toString()).then((data) => setCard(data));
+		if (query.id) read(cards, query.id.toString()).then((data) => setCard(data));
 		setValue(window.location.toString());
 	}, [query]);
 

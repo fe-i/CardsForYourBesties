@@ -46,7 +46,7 @@ const CreateForm: React.FC<{
 	setCard: any;
 }> = ({ card, setCard }) => {
 	const router = useRouter();
-	const { write, upload } = useFirebase();
+	const { write, upload, cards } = useFirebase();
 	const [recipient, setRecipient] = useState<string>(card.recipient);
 	const [sender, setSender] = useState<string>(card.sender);
 	const [message, setMessage] = useState<string>(card.message);
@@ -75,7 +75,7 @@ const CreateForm: React.FC<{
 		else if (typeof image === "string" && image) url = image;
 		else return toast("Please provide an image!", "error");
 
-		await write({ recipient, sender, message, image: url }).then((id: any) =>
+		await write(cards, { recipient, sender, message, image: url }).then((id: any) =>
 			router.push(`/view/card?id=${id}`)
 		);
 		return toast("Created successfully!", "success");
