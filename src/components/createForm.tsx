@@ -52,6 +52,7 @@ const CreateForm: React.FC<{
 	const [message, setMessage] = useState<string>(card.message);
 	const [image, setImage] = useState<File | string | null>(card.image);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [loading, setLoading] = useState(false);
 
 	const toastHook = useToast();
 	const toast = (description: string, status: any) => {
@@ -69,16 +70,18 @@ const CreateForm: React.FC<{
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
+		setLoading(true);
 
 		let url;
 		if (image instanceof File) url = await upload(image);
 		else if (typeof image === "string" && image) url = image;
 		else return toast("Please provide an image!", "error");
 
-		await write(cards, { recipient, sender, message, image: url }).then((id: any) =>
-			router.push(`/view/card?id=${id}`)
-		);
-		return toast("Created successfully!", "success");
+		await write(cards, { recipient, sender, message, image: url }).then((id: any) => {
+			router.push(`/view/card?id=${id}`);
+			setLoading(false);
+			toast("Created successfully!", "success");
+		});
 	};
 
 	useEffect(() => {
@@ -165,7 +168,14 @@ const CreateForm: React.FC<{
 						</Button>
 					</Flex>
 				</FormControl>
-				<Button type="submit" leftIcon={<IoCreate size={20} />} mt={4} w="full">
+				<Button
+					type="submit"
+					leftIcon={<IoCreate size={20} />}
+					isLoading={loading}
+					loadingText="Loading"
+					spinnerPlacement="start"
+					mt={4}
+					w="full">
 					Create Card
 				</Button>
 			</form>
