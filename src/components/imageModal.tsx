@@ -57,7 +57,6 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 			setImage(`https://${url}`);
 			toast("Image added from URL!", "success");
 		} catch (e) {
-			console.log(e);
 			toast("Error getting image from URL!", "error");
 		}
 	};
