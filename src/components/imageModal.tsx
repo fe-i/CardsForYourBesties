@@ -20,22 +20,6 @@ import {
 import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
-const isURL = (str: string): boolean => {
-	const regex = /^[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
-	return regex.test(str);
-};
-
-const imageFromURL = async (url: string) => {
-	const response = await fetch(`https://${url}`).catch(() => {});
-	if (!response) return null;
-
-	const blob = await response.blob();
-	if (!blob.type.startsWith("image/")) return null;
-
-	const file = new File([blob], `image.${blob.type.split("/")[1]}`, { type: blob.type });
-	return file;
-};
-
 const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any }> = ({
 	isOpen,
 	onClose,
@@ -67,26 +51,34 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 
-		const url = e.target[0].value?.replace(/^https?:\/\//, "");
-		if (isURL(url) && (await imageFromURL(url))) {
+		try {
+			const url = e.target[0].value?.replace(/^https?:\/\//, "");
+			await fetch(`https://${url}`, { mode: "no-cors" });
 			setImage(`https://${url}`);
-			return toast("Image added from URL!", "success");
-		} else return toast("Error getting image from URL!", "error");
+			toast("Image added from URL!", "success");
+		} catch (e) {
+			console.log(e);
+			toast("Error getting image from URL!", "error");
+		}
 	};
 
 	useEffect(() => {
-		document.onpaste = (e) => {
-			const items = e.clipboardData?.items;
-			if (!items) return;
+		if (isOpen) {
+			document.onpaste = (e) => {
+				const items = e.clipboardData?.items;
+				if (!items) return;
 
-			const image = Array.from(items).find((item) => item.type.startsWith("image/"));
-			if (!image) return;
+				const image = Array.from(items).find((item) => item.type.startsWith("image/"));
+				if (!image) return;
 
-			const file = image.getAsFile();
-			setImage(file);
-			toast("Image added from clipboard!", "success");
-		};
-	}, []);
+				const file = image.getAsFile();
+				setImage(file);
+				toast("Image added from clipboard!", "success");
+			};
+		} else {
+			document.onpaste = null;
+		}
+	}, [isOpen]);
 
 	return (
 		<Modal blockScrollOnMount={true} isOpen={isOpen} onClose={onClose} isCentered>
@@ -98,21 +90,10 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 				<ModalBody>
 					<Tabs variant="line" isFitted>
 						<TabList>
-							<Tab>Draw</Tab>
 							<Tab>Upload Image</Tab>
 							<Tab>Use Image URL</Tab>
 						</TabList>
 						<TabPanels>
-							<TabPanel>
-								<Text>DRAW coming soon ;)</Text>
-								<InputGroup
-									justifyContent="center"
-									borderWidth={2}
-									borderRadius={10}
-									borderStyle="dashed"
-									px={12}
-									py={20}></InputGroup>
-							</TabPanel>
 							<TabPanel>
 								<InputGroup
 									justifyContent="center"
@@ -132,7 +113,7 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 							</TabPanel>
 							<TabPanel>
 								<form onSubmit={handleSubmit}>
-									<InputGroup justifyContent="center" py={10}>
+									<InputGroup justifyContent="center" py={20}>
 										<InputLeftAddon>https://</InputLeftAddon>
 										<Input type="string" placeholder="image url" />
 										<Button type="submit" ml={1}>

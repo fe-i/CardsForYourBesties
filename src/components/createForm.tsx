@@ -75,7 +75,10 @@ const CreateForm: React.FC<{
 		let url;
 		if (image instanceof File) url = await upload(image);
 		else if (typeof image === "string" && image) url = image;
-		else return toast("Please provide an image!", "error");
+		else {
+			setLoading(false);
+			return toast("Please provide an image!", "error");
+		}
 
 		await write(cards, { recipient, sender, message, image: url }).then((id: any) => {
 			router.push(`/view/card?id=${id}`);

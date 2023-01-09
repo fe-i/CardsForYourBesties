@@ -13,11 +13,11 @@ const Home: NextPage = () => {
 				textAlign="center"
 				gap={6}
 				px={8}
-				py={{ base: 180, md: 200 }}>
+				py="32vh">
 				<Heading
 					fontFamily="mono"
 					fontWeight={600}
-					fontSize={{ base: "4xl", md: "6xl" }}
+					fontSize={{ base: "5xl", md: "6xl" }}
 					lineHeight="110%">
 					Card making{" "}
 					<Text as="span" color="green.400">

@@ -12,10 +12,10 @@ const Create: NextPage = () => {
 		message: string;
 		image: string;
 	}>({
-		recipient: "recipient",
-		sender: "sender",
-		message: "your message here",
-		image: "/image.png"
+		recipient: "bob",
+		sender: "joe",
+		message: "i love you!",
+		image: ""
 	});
 	return (
 		<Layout title="Card Builder">
