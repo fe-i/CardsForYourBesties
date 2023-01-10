@@ -14,8 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import { IoCreate } from "react-icons/io5";
 import { useRouter } from "next/router";
-import useFirebase from "../hooks/useFirebase";
-import ImageModal from "./imageModal";
+import useFirebase from "../../hooks/useFirebase";
+import ImageModal from "../imageModal";
 
 const options = [
 	{
@@ -36,7 +36,7 @@ const options = [
 	}
 ];
 
-const CreateForm: React.FC<{
+const CardCreateForm: React.FC<{
 	card: {
 		recipient: string;
 		sender: string;
@@ -186,4 +186,4 @@ const CreateForm: React.FC<{
 	);
 };
 
-export default CreateForm;
+export default CardCreateForm;

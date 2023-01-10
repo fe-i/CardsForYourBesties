@@ -2,7 +2,7 @@ import { Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import { NextPage } from "next";
 import Layout from "../../../src/components/layout";
-import CreateForm from "../../../src/components/createForm";
+import CardCreateForm from "../../components/forms/cardCreateForm";
 import Card from "../../../src/components/card";
 
 const Create: NextPage = () => {
@@ -21,7 +21,7 @@ const Create: NextPage = () => {
 		<Layout title="Card Builder">
 			<Flex align="center" justify="center" p={6}>
 				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
-					<CreateForm card={card} setCard={setCard} />
+					<CardCreateForm card={card} setCard={setCard} />
 					<Card
 						recipient={card.recipient}
 						sender={card.sender}
