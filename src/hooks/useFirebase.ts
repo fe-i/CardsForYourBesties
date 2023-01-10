@@ -4,7 +4,7 @@ import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
 	sendPasswordResetEmail,
-	signOut,
+	signOut as signOutOfAccount,
 	deleteUser
 } from "firebase/auth";
 import {
@@ -45,24 +45,27 @@ const users = collection(firestore, "users");
 const cards = collection(firestore, "cards");
 
 const useFirebase = () => {
-	const logIn = async (email: string, password: string) => {
+	const signIn = async (email: string, password: string) => {
 		try {
 			const { user } = await signInWithEmailAndPassword(auth, email, password);
 			const data = await read(users, user.uid);
-			console.log(`Logged in as: ${data?.username}`);
-			return data;
+			if (!data) return null;
+			else {
+				console.log(`Logged in as: ${data?.username}`);
+				return data;
+			}
 		} catch (e) {
 			console.error(`Error logging in: ${e}`);
-			return undefined;
+			return null;
 		}
 	};
 
-	const logOut = () => {
+	const signOut = () => {
 		if (auth.currentUser !== null) {
-			signOut(auth);
+			signOutOfAccount(auth);
 			console.log("Logged out!");
 		} else console.error("Not logged in!");
-		return undefined;
+		return null;
 	};
 
 	const signUp = async (username: string, email: string, password: string) => {
@@ -78,11 +81,14 @@ const useFirebase = () => {
 				},
 				user.uid
 			);
-			console.log(`Signed up as: ${username}`);
-			return id ? await read(users, id) : undefined;
+			if (!id) return null;
+			else {
+				console.log(`Signed up as: ${username}`);
+				return await read(users, id);
+			}
 		} catch (e) {
 			console.error(`Error signing up: ${e}`);
-			return undefined;
+			return null;
 		}
 	};
 
@@ -106,6 +112,7 @@ const useFirebase = () => {
 		} catch (e) {
 			console.error(`Error deleting user: ${e}`);
 		}
+		return null;
 	};
 
 	const write = async (colRef: CollectionReference<DocumentData>, data: object, id?: string) => {
@@ -121,7 +128,7 @@ const useFirebase = () => {
 			}
 		} catch (e) {
 			console.error(`Error adding document: ${e}`);
-			return undefined;
+			return null;
 		}
 	};
 
@@ -132,7 +139,7 @@ const useFirebase = () => {
 			return docSnap.data();
 		} else {
 			console.error("Document not found!");
-			return undefined;
+			return null;
 		}
 	};
 
@@ -151,8 +158,8 @@ const useFirebase = () => {
 	};
 
 	return {
-		logIn,
-		logOut,
+		signIn,
+		signOut,
 		signUp,
 		resetPassword,
 		deleteAccount,

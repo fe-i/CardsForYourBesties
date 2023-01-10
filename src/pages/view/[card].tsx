@@ -10,7 +10,7 @@ import useFirebase from "../../hooks/useFirebase";
 const ViewCard: NextPage = () => {
 	const { query } = useRouter();
 	const { read, cards } = useFirebase();
-	const [card, setCard] = useState<DocumentData | null | undefined>(null);
+	const [card, setCard] = useState<DocumentData | null | undefined>(undefined);
 	const { onCopy, setValue, hasCopied } = useClipboard("");
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ const ViewCard: NextPage = () => {
 							{hasCopied ? "Copied!" : "Copy Link To Share"}
 						</Button>
 					</>
-				) : card === undefined ? (
+				) : card === null ? (
 					<Text fontSize="3xl">Card Not Found</Text>
 				) : (
 					<Flex flexDir="row" align="center" justify="center" gap={5}>
