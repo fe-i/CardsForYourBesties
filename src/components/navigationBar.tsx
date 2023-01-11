@@ -10,7 +10,6 @@ import {
 	MenuItem,
 	MenuDivider
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useRouter } from "next/router";
 import {
 	MdOutlineAccountCircle,
@@ -19,14 +18,14 @@ import {
 	MdOutlineLogout,
 	MdOutlineSettings
 } from "react-icons/md";
-import { DocumentData } from "@firebase/firestore";
 import Link from "next/link";
 import useFirebase from "../hooks/useFirebase";
+import useAuth from "../hooks/useAuth";
 
 const NavigationBar: React.FC = () => {
 	const { push } = useRouter();
 	const { signIn, signOut, signUp, resetPassword, deleteAccount } = useFirebase();
-	const [user, setUser] = useState<DocumentData | null>(null);
+	const { user, setUser } = useAuth();
 
 	return (
 		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
@@ -68,12 +67,10 @@ const NavigationBar: React.FC = () => {
 						<MdOutlineAccountCircle size="2rem" />
 					</MenuButton>
 					<MenuList
-						as={Flex}
 						flexDir="column"
 						alignItems="center"
 						justifyContent="center"
-						textAlign="center"
-						gap={1}>
+						textAlign="center">
 						<MenuItem onClick={() => push("/account#cards")} gap={1}>
 							<MdOutlineArticle size={20} />
 							<Text>Your Cards</Text>

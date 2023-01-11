@@ -16,8 +16,10 @@ import { useRouter } from "next/router";
 import { DocumentData } from "@firebase/firestore";
 import useFirebase from "../../hooks/useFirebase";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import useAuth from "../../hooks/useAuth";
 
-const SignUpForm: React.FC<{ setUser: any }> = ({ setUser }) => {
+const SignUpForm: React.FC = () => {
+	const { setUser } = useAuth();
 	const { push } = useRouter();
 	const { signUp } = useFirebase();
 	const [name, setName] = useState("");
