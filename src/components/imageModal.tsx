@@ -11,11 +11,12 @@ import {
 	TabPanels,
 	TabPanel,
 	Text,
+	FormControl,
 	InputGroup,
-	InputLeftAddon,
 	Input,
 	Button,
-	useToast
+	useToast,
+	FormLabel
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
@@ -112,13 +113,18 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 							</TabPanel>
 							<TabPanel>
 								<form onSubmit={handleSubmit}>
-									<InputGroup justifyContent="center" py={20}>
-										<InputLeftAddon>https://</InputLeftAddon>
-										<Input type="string" placeholder="image url" />
-										<Button type="submit" ml={1}>
-											Add
-										</Button>
-									</InputGroup>
+									<FormControl justifyContent="center" py={20} isRequired>
+										<FormLabel>Image URL</FormLabel>
+										<InputGroup>
+											<Input
+												type="url"
+												placeholder="https://example.com/image.png"
+											/>
+											<Button type="submit" ml={1}>
+												Add
+											</Button>
+										</InputGroup>
+									</FormControl>
 								</form>
 							</TabPanel>
 						</TabPanels>

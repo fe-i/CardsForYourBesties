@@ -19,7 +19,7 @@ const Create: NextPage = () => {
 	});
 	return (
 		<Layout title="Card Builder">
-			<Flex align="center" justify="center" p={6}>
+			<Flex align="center" justify="center" px={6} py={8}>
 				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
 					<CardCreateForm card={card} setCard={setCard} />
 					<Card

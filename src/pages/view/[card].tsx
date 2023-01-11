@@ -14,7 +14,10 @@ const ViewCard: NextPage = () => {
 	const { onCopy, setValue, hasCopied } = useClipboard("");
 
 	useEffect(() => {
-		if (query.id) read(cards, query.id.toString()).then((data) => setCard(data));
+		if (query.id)
+			read(cards, query.id.toString()).then((data: DocumentData | null | undefined) =>
+				setCard(data)
+			);
 		setValue(window.location.toString());
 	}, [query]);
 

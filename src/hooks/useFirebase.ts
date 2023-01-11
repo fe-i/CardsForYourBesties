@@ -51,7 +51,7 @@ const useFirebase = () => {
 			const data = await read(users, user.uid);
 			if (!data) return null;
 			else {
-				console.log(`Logged in as: ${data?.username}`);
+				console.log(`Logged in as: ${data?.name}`);
 				return data;
 			}
 		} catch (e) {
@@ -68,13 +68,13 @@ const useFirebase = () => {
 		return null;
 	};
 
-	const signUp = async (username: string, email: string, password: string) => {
+	const signUp = async (name: string, email: string, password: string) => {
 		try {
 			const { user } = await createUserWithEmailAndPassword(auth, email, password);
 			const id = await write(
 				users,
 				{
-					username,
+					name,
 					email,
 					password,
 					cards: []
@@ -83,7 +83,7 @@ const useFirebase = () => {
 			);
 			if (!id) return null;
 			else {
-				console.log(`Signed up as: ${username}`);
+				console.log(`Signed up as: ${name}`);
 				return await read(users, id);
 			}
 		} catch (e) {

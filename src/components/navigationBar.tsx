@@ -4,16 +4,30 @@ import {
 	Image,
 	Text,
 	Button,
-	Avatar,
 	Menu,
 	MenuButton,
 	MenuList,
 	MenuItem,
 	MenuDivider
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import {
+	MdOutlineAccountCircle,
+	MdOutlineArticle,
+	MdOutlineLogin,
+	MdOutlineLogout,
+	MdOutlineSettings
+} from "react-icons/md";
+import { DocumentData } from "@firebase/firestore";
 import Link from "next/link";
+import useFirebase from "../hooks/useFirebase";
 
 const NavigationBar: React.FC = () => {
+	const { push } = useRouter();
+	const { signIn, signOut, signUp, resetPassword, deleteAccount } = useFirebase();
+	const [user, setUser] = useState<DocumentData | null>(null);
+
 	return (
 		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
 			<Link href="/" title="Home">
@@ -27,25 +41,67 @@ const NavigationBar: React.FC = () => {
 					</Heading>
 				</Flex>
 			</Link>
-			<Menu>
-				<MenuButton as={Button} rounded="full" variant="link">
-					<Avatar
-						size="sm"
-						src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
-					/>
-				</MenuButton>
-				<MenuList alignItems="center" textAlign="center">
-					<Avatar
-						size="2xl"
-						src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=2000"
-					/>
-					<Text my={4}>Username</Text>
-					<MenuDivider />
-					<MenuItem>Your Cards</MenuItem>
-					<MenuItem>Manage Account</MenuItem>
-					<MenuItem>Logout</MenuItem>
-				</MenuList>
-			</Menu>
+			{user === null ? (
+				<Flex>
+					<Button
+						rounded="full"
+						variant="ghost"
+						onClick={async () => {
+							const data = await signIn("ll@11.com", "123454");
+							setUser(data);
+							//push("/signin");
+						}}>
+						<MdOutlineLogin size="2rem" />
+					</Button>
+					<Button
+						onClick={async () => {
+							const data = await signUp("bob", "ll@11.com", "123454");
+							setUser(data);
+							//push("/signup")
+						}}>
+						signup (test)
+					</Button>
+				</Flex>
+			) : (
+				<Menu>
+					<MenuButton as={Button} rounded="full" variant="ghost">
+						<MdOutlineAccountCircle size="2rem" />
+					</MenuButton>
+					<MenuList
+						as={Flex}
+						flexDir="column"
+						alignItems="center"
+						justifyContent="center"
+						textAlign="center"
+						gap={1}>
+						<MenuItem onClick={() => push("/account#cards")} gap={1}>
+							<MdOutlineArticle size={20} />
+							<Text>Your Cards</Text>
+						</MenuItem>
+						<MenuItem onClick={() => push("/account#manage")} gap={1}>
+							<MdOutlineSettings size={20} />
+							<Text>Manage Account</Text>
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								const res = signOut();
+								setUser(res);
+								push("/");
+							}}
+							gap={1}>
+							<MdOutlineLogout size={20} />
+							<Text>Sign Out</Text>
+						</MenuItem>
+						<Button
+							onClick={async () => {
+								const data = await deleteAccount();
+								setUser(data);
+							}}>
+							delete acc (test)
+						</Button>
+					</MenuList>
+				</Menu>
+			)}
 		</Flex>
 	);
 };
