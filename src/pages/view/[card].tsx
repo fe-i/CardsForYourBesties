@@ -1,4 +1,4 @@
-import { Flex, Text, Spinner, Button, useClipboard } from "@chakra-ui/react";
+import { Flex, Text, Spinner } from "@chakra-ui/react";
 import { DocumentData } from "@firebase/firestore";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -11,31 +11,24 @@ const ViewCard: NextPage = () => {
 	const { query } = useRouter();
 	const { read, cards } = useFirebase();
 	const [card, setCard] = useState<DocumentData | null | undefined>(undefined);
-	const { onCopy, setValue, hasCopied } = useClipboard("");
 
 	useEffect(() => {
 		if (query.id)
 			read(cards, query.id.toString()).then((data: DocumentData | null | undefined) =>
 				setCard(data)
 			);
-		setValue(window.location.toString());
 	}, [query]);
 
 	return (
 		<Layout title="View Card">
-			<Flex flexDir="column" align="center" justify="center" fontSize="lg" gap={5} py={10}>
+			<Flex flexDir="column" align="center" justify="center" fontSize="lg" py={10}>
 				{card ? (
-					<>
-						<Card
-							recipient={card.recipient}
-							sender={card.sender}
-							message={card.message}
-							image={card.image}
-						/>
-						<Button w="auto" onClick={onCopy}>
-							{hasCopied ? "Copied!" : "Copy Link To Share"}
-						</Button>
-					</>
+					<Card
+						recipient={card.recipient}
+						sender={card.sender}
+						message={card.message}
+						image={card.image}
+					/>
 				) : card === null ? (
 					<Text fontSize="3xl">Card Not Found</Text>
 				) : (

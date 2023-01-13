@@ -2,17 +2,17 @@ import { initializeApp } from "firebase/app";
 import {
 	getAuth,
 	signInWithEmailAndPassword,
+	signOut as signOutOfAccount,
 	createUserWithEmailAndPassword,
 	sendPasswordResetEmail,
-	signOut as signOutOfAccount,
 	deleteUser
 } from "firebase/auth";
 import {
 	getFirestore,
 	collection,
 	doc,
-	addDoc,
 	setDoc,
+	addDoc,
 	getDoc,
 	deleteDoc,
 	CollectionReference,
@@ -38,66 +38,47 @@ initializeApp({
 	appId: APP_ID
 });
 
-const auth = getAuth();
-const storage = getStorage();
-const firestore = getFirestore();
-const users = collection(firestore, "users");
-const cards = collection(firestore, "cards");
-
 const useFirebase = () => {
+	const auth = getAuth();
+	const firestore = getFirestore();
+	const storage = getStorage();
+	const cards = collection(firestore, "cards");
+	const users = collection(firestore, "users");
+
 	const signIn = async (email: string, password: string) => {
+		//TODO: make auth functions return a value instead of void
 		try {
 			const { user } = await signInWithEmailAndPassword(auth, email, password);
-			const data = await read(users, user.uid);
-			if (!data) return null;
-			else {
-				console.log(`Logged in as: ${data?.name}`);
-				return data;
-			}
+			console.log(`[signIn] Signed in! ID: ${user.uid}`);
 		} catch (e) {
-			console.error(`Error logging in: ${e}`);
-			return null;
+			console.error(`[signIn] Error: ${e}`);
 		}
 	};
 
 	const signOut = () => {
-		if (auth.currentUser !== null) {
+		const { currentUser } = auth;
+		if (currentUser !== null) {
 			signOutOfAccount(auth);
-			console.log("Logged out!");
-		} else console.error("Not logged in!");
-		return null;
+			console.log(`[signOut] Signed out! ID: ${currentUser.uid}`);
+		} else console.error("[signOut] Not signed in!");
 	};
 
 	const signUp = async (name: string, email: string, password: string) => {
 		try {
 			const { user } = await createUserWithEmailAndPassword(auth, email, password);
-			const id = await write(
-				users,
-				{
-					name,
-					email,
-					password,
-					cards: []
-				},
-				user.uid
-			);
-			if (!id) return null;
-			else {
-				console.log(`Signed up as: ${name}`);
-				return await read(users, id);
-			}
+			await write(users, { name, email, password, cards: [] }, user.uid);
+			console.log(`[signUp] Signed up! ID: ${user.uid}`);
 		} catch (e) {
-			console.error(`Error signing up: ${e}`);
-			return null;
+			console.error(`[signUp] Error: ${e}`);
 		}
 	};
 
 	const resetPassword = async (email: string) => {
 		try {
 			await sendPasswordResetEmail(auth, email);
-			console.log("Password reset email sent!");
+			console.log("[resetPassword] Email sent!");
 		} catch (e) {
-			console.error(`Error sending password reset email: ${e}`);
+			console.error(`[resetPassword] Error: ${e}}`);
 		}
 	};
 
@@ -107,27 +88,26 @@ const useFirebase = () => {
 			if (currentUser) {
 				await deleteUser(currentUser);
 				await _delete(users, currentUser.uid);
-				console.log(`Deleted user with ID: ${currentUser.uid}`);
+				console.log(`[deleteAccount] Deleted user! ID: ${currentUser.uid}`);
 			}
 		} catch (e) {
-			console.error(`Error deleting user: ${e}`);
+			console.error(`[deleteAccount] Error: ${e}`);
 		}
-		return null;
 	};
 
 	const write = async (colRef: CollectionReference<DocumentData>, data: object, id?: string) => {
 		try {
 			if (id) {
 				await setDoc(doc(colRef, id), data);
-				console.log(`Document written with ID: ${id}`);
+				console.log(`[write] Document written! ID: ${id}`);
 				return id;
 			} else {
-				const docRef = await addDoc(colRef, data);
-				console.log(`Document written with ID: ${docRef.id}`);
-				return docRef.id;
+				const { id } = await addDoc(colRef, data);
+				console.log(`[write] Document written! ID: ${id}`);
+				return id;
 			}
 		} catch (e) {
-			console.error(`Error adding document: ${e}`);
+			console.error(`[write] Error: ${e}`);
 			return null;
 		}
 	};
@@ -135,10 +115,10 @@ const useFirebase = () => {
 	const read = async (colRef: CollectionReference<DocumentData>, id: string) => {
 		const docSnap = await getDoc(doc(colRef, id));
 		if (docSnap.exists()) {
-			console.log(`Document found with ID: ${docSnap.id}`);
+			console.log(`[read] Document found! ID: ${docSnap.id}`);
 			return docSnap.data();
 		} else {
-			console.error("Document not found!");
+			console.error("[read] Document not found!");
 			return null;
 		}
 	};
@@ -146,8 +126,9 @@ const useFirebase = () => {
 	const _delete = async (colRef: CollectionReference<DocumentData>, id: string) => {
 		try {
 			await deleteDoc(doc(colRef, id));
+			console.log("[delete] Document deleted!");
 		} catch (e) {
-			console.error("Document not found!");
+			console.error("[delete] Document not found!");
 		}
 	};
 
@@ -158,6 +139,11 @@ const useFirebase = () => {
 	};
 
 	return {
+		auth,
+		firestore,
+		storage,
+		cards,
+		users,
 		signIn,
 		signOut,
 		signUp,
@@ -166,9 +152,7 @@ const useFirebase = () => {
 		write,
 		read,
 		_delete,
-		upload,
-		users,
-		cards
+		upload
 	};
 };
 

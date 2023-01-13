@@ -11,14 +11,13 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { MdOutlineRemoveRedEye, MdOutlineCreate } from "react-icons/md";
+import { MdOutlineRemoveRedEye, MdOutlineLogin } from "react-icons/md";
 import useFirebase from "../../hooks/useFirebase";
 import useAuth from "../../hooks/useAuth";
 
-const SignUpForm: React.FC = () => {
+const SignInForm: React.FC = () => {
 	const { push } = useRouter();
-	const { signUp } = useFirebase();
-	const [name, setName] = useState("");
+	const { signIn } = useFirebase();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [show, setShow] = useState(false);
@@ -29,7 +28,7 @@ const SignUpForm: React.FC = () => {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		setLoading(true);
-		await signUp(e.target[0].value, e.target[1].value, e.target[2].value);
+		await signIn(e.target[0].value, e.target[1].value);
 		push("/account");
 		setLoading(false);
 	};
@@ -46,16 +45,6 @@ const SignUpForm: React.FC = () => {
 			py={6}>
 			<form onSubmit={handleSubmit}>
 				<Flex flexDir="column" gap={2}>
-					<FormControl isInvalid={!name} isRequired>
-						<FormLabel>Name</FormLabel>
-						<Input
-							placeholder="name"
-							maxLength={50}
-							onChange={(e) => setName(e.target.value)}
-							value={name}
-						/>
-						<FormErrorMessage>Enter a valid name.</FormErrorMessage>
-					</FormControl>
 					<FormControl isInvalid={!email} isRequired>
 						<FormLabel>Email</FormLabel>
 						<Input
@@ -88,23 +77,23 @@ const SignUpForm: React.FC = () => {
 					</FormControl>
 					<Button
 						type="submit"
-						leftIcon={<MdOutlineCreate size={20} />}
+						leftIcon={<MdOutlineLogin size={20} />}
 						isLoading={loading}
 						loadingText="Loading"
 						spinnerPlacement="start"
 						mt={4}
 						w="full">
-						Create Account
+						Sign In
 					</Button>
 				</Flex>
 			</form>
-			<Button onClick={async () => await signUp("bob", "ll@11.com", "123454")}>
-				signup with random details
+			<Button onClick={async () => await signIn("ll@11.com", "123454")}>
+				signin with random details
 			</Button>
 		</Flex>
 	);
 };
 
-export default SignUpForm;
+export default SignInForm;
 
 //TODO: remove test button

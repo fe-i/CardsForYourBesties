@@ -14,11 +14,10 @@ import {
 	useToast
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { IoCreate } from "react-icons/io5";
 import { useRouter } from "next/router";
+import { MdOutlineAddPhotoAlternate, MdOutlinePhoto, MdOutlineCreate } from "react-icons/md";
 import useFirebase from "../../hooks/useFirebase";
 import ImageModal from "../imageModal";
-import { MdOutlineAddPhotoAlternate, MdOutlinePhoto } from "react-icons/md";
 
 const options = [
 	{
@@ -84,9 +83,11 @@ const CardCreateForm: React.FC<{
 		}
 
 		await write(cards, { recipient, sender, message, image: url }).then((id: string | null) => {
-			push(`/view/card?id=${id}`);
+			if (id !== null) {
+				push(`/view/card?id=${id}`);
+				toast("Created successfully!", "success");
+			} else toast("Unable to create card!", "error");
 			setLoading(false);
-			toast("Created successfully!", "success");
 		});
 	};
 
@@ -187,7 +188,7 @@ const CardCreateForm: React.FC<{
 					</FormControl>
 					<Button
 						type="submit"
-						leftIcon={<IoCreate size={20} />}
+						leftIcon={<MdOutlineCreate size={20} />}
 						isLoading={loading}
 						loadingText="Loading"
 						spinnerPlacement="start"

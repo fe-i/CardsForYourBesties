@@ -6,13 +6,21 @@ import SignUpForm from "../../components/forms/signUpForm";
 const SignUp: NextPage = () => {
 	return (
 		<Layout title="Sign Up">
-			<Flex align="center" justify="center" p={6}>
-				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
-					<SignUpForm />
-				</Flex>
+			<Flex
+				flexDir="row"
+				flexWrap="wrap"
+				align="center"
+				justify="center"
+				textAlign="center"
+				fontSize="lg"
+				px={6}
+				py="14vh">
+				<SignUpForm />
 			</Flex>
 		</Layout>
 	);
 };
 
 export default SignUp;
+
+//TODO: link with login form, check login stats and push

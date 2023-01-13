@@ -18,20 +18,23 @@ import {
 	useToast,
 	FormLabel
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { MdOutlineInsertPhoto } from "react-icons/md";
 
 const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any }> = ({
 	isOpen,
 	onClose,
 	setImage
 }) => {
+	const [loading, setLoading] = useState(false);
+
 	const toastHook = useToast();
 	const toast = (description: string, status: any) => {
 		if (!toastHook.isActive("toast"))
 			toastHook({
 				id: "toast",
-				title: "Card Builder",
+				title: "Image Selector",
 				description,
 				status,
 				duration: 4000,
@@ -51,15 +54,18 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-
+		setLoading(true);
 		try {
-			const url = e.target[0].value?.replace(/^https?:\/\//, "");
-			await fetch(`https://${url}`, { mode: "no-cors" });
-			setImage(`https://${url}`);
+			//TODO: possibly does not work
+			const response = await fetch(e.target[0].value, { mode: "no-cors" });
+			const blob = await response.blob();
+			if (!blob.type.startsWith("image/")) throw new Error("Not an image!");
+			setImage(e.target[0].value);
 			toast("Image added from URL!", "success");
 		} catch (e) {
 			toast("Error getting image from URL!", "error");
 		}
+		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -120,7 +126,13 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 												type="url"
 												placeholder="https://example.com/image.png"
 											/>
-											<Button type="submit" ml={1}>
+											<Button
+												type="submit"
+												leftIcon={<MdOutlineInsertPhoto size={20} />}
+												isLoading={loading}
+												loadingText="Loading"
+												spinnerPlacement="start"
+												ml={1}>
 												Add
 											</Button>
 										</InputGroup>

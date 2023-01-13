@@ -7,8 +7,7 @@ import {
 	Menu,
 	MenuButton,
 	MenuList,
-	MenuItem,
-	MenuDivider
+	MenuItem
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import {
@@ -24,8 +23,8 @@ import useAuth from "../hooks/useAuth";
 
 const NavigationBar: React.FC = () => {
 	const { push } = useRouter();
-	const { signIn, signOut, signUp, resetPassword, deleteAccount } = useFirebase();
-	const { user, setUser } = useAuth();
+	const { signOut } = useFirebase();
+	const { user } = useAuth();
 
 	return (
 		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
@@ -41,26 +40,9 @@ const NavigationBar: React.FC = () => {
 				</Flex>
 			</Link>
 			{user === null ? (
-				<Flex>
-					<Button
-						rounded="full"
-						variant="ghost"
-						onClick={async () => {
-							const data = await signIn("ll@11.com", "123454");
-							setUser(data);
-							//push("/signin");
-						}}>
-						<MdOutlineLogin size="2rem" />
-					</Button>
-					<Button
-						onClick={async () => {
-							const data = await signUp("bob", "ll@11.com", "123454");
-							setUser(data);
-							//push("/signup")
-						}}>
-						signup (test)
-					</Button>
-				</Flex>
+				<Button rounded="full" variant="ghost" onClick={() => push("/signin")}>
+					<MdOutlineLogin size="2rem" />
+				</Button>
 			) : (
 				<Menu>
 					<MenuButton as={Button} rounded="full" variant="ghost">
@@ -81,21 +63,13 @@ const NavigationBar: React.FC = () => {
 						</MenuItem>
 						<MenuItem
 							onClick={() => {
-								const res = signOut();
-								setUser(res);
+								signOut();
 								push("/");
 							}}
 							gap={1}>
 							<MdOutlineLogout size={20} />
 							<Text>Sign Out</Text>
 						</MenuItem>
-						<Button
-							onClick={async () => {
-								const data = await deleteAccount();
-								setUser(data);
-							}}>
-							delete acc (test)
-						</Button>
 					</MenuList>
 				</Menu>
 			)}

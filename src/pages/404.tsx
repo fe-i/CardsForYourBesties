@@ -11,7 +11,7 @@ const NotFound: NextPage = () => {
 				align="center"
 				justify="center"
 				textAlign="center"
-				gap={5}
+				gap={6}
 				px={8}
 				py="32vh">
 				<Heading
