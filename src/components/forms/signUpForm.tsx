@@ -98,7 +98,11 @@ const SignUpForm: React.FC = () => {
 					</Button>
 				</Flex>
 			</form>
-			<Button onClick={async () => await signUp("bob", "ll@11.com", "123454")}>
+			<Button
+				onClick={async () => {
+					await signUp("bob", "ll@11.com", "123454");
+					push("/account");
+				}}>
 				signup with random details
 			</Button>
 		</Flex>

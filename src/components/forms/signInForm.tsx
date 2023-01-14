@@ -87,7 +87,11 @@ const SignInForm: React.FC = () => {
 					</Button>
 				</Flex>
 			</form>
-			<Button onClick={async () => await signIn("ll@11.com", "123454")}>
+			<Button
+				onClick={async () => {
+					await signIn("ll@11.com", "123454");
+					push("/account");
+				}}>
 				signin with random details
 			</Button>
 		</Flex>
