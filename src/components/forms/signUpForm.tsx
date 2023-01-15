@@ -4,23 +4,26 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
 	Input,
 	InputGroup,
 	InputRightElement,
+	Text,
 	useColorModeValue
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { MdOutlineRemoveRedEye, MdOutlineCreate } from "react-icons/md";
+import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlinePersonAdd } from "react-icons/md";
+import Link from "next/link";
 import useFirebase from "../../hooks/useFirebase";
 import useAuth from "../../hooks/useAuth";
 
 const SignUpForm: React.FC = () => {
 	const { push } = useRouter();
 	const { signUp } = useFirebase();
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [name, setName] = useState<string | undefined>(undefined);
+	const [email, setEmail] = useState<string | undefined>(undefined);
+	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -29,9 +32,12 @@ const SignUpForm: React.FC = () => {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		setLoading(true);
-		await signUp(e.target[0].value, e.target[1].value, e.target[2].value);
-		push("/account");
-		setLoading(false);
+		await signUp(e.target[0].value, e.target[1].value, e.target[2].value).then((res) => {
+			if (res !== null) {
+				push("/account");
+			}
+			setLoading(false);
+		});
 	};
 
 	return (
@@ -44,30 +50,33 @@ const SignUpForm: React.FC = () => {
 			gap={2}
 			px={6}
 			py={6}>
+			<Heading fontSize="4xl" textDecor="underline" pb={2}>
+				Sign Up
+			</Heading>
 			<form onSubmit={handleSubmit}>
 				<Flex flexDir="column" gap={2}>
-					<FormControl isInvalid={!name} isRequired>
+					<FormControl isInvalid={name === ""} isRequired>
 						<FormLabel>Name</FormLabel>
 						<Input
 							placeholder="name"
 							maxLength={50}
 							onChange={(e) => setName(e.target.value)}
-							value={name}
+							value={name ?? ""}
 						/>
 						<FormErrorMessage>Enter a valid name.</FormErrorMessage>
 					</FormControl>
-					<FormControl isInvalid={!email} isRequired>
+					<FormControl isInvalid={email === ""} isRequired>
 						<FormLabel>Email</FormLabel>
 						<Input
 							type="email"
 							placeholder="email"
 							maxLength={100}
 							onChange={(e) => setEmail(e.target.value)}
-							value={email}
+							value={email ?? ""}
 						/>
 						<FormErrorMessage>Enter a valid email address.</FormErrorMessage>
 					</FormControl>
-					<FormControl isInvalid={!password} isRequired>
+					<FormControl isInvalid={password === ""} isRequired>
 						<FormLabel>Password</FormLabel>
 						<InputGroup>
 							<Input
@@ -76,11 +85,11 @@ const SignUpForm: React.FC = () => {
 								minLength={8}
 								maxLength={50}
 								onChange={(e) => setPassword(e.target.value)}
-								value={password}
+								value={password ?? ""}
 							/>
-							<InputRightElement width="4.5rem">
-								<Button rounded="full" variant="ghost" onClick={handleClick}>
-									<MdOutlineRemoveRedEye size={20} />
+							<InputRightElement>
+								<Button rounded="md" variant="ghost" p={0} onClick={handleClick}>
+									{show ? <MdOutlineVisibilityOff /> : <MdOutlineVisibility />}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
@@ -88,7 +97,7 @@ const SignUpForm: React.FC = () => {
 					</FormControl>
 					<Button
 						type="submit"
-						leftIcon={<MdOutlineCreate size={20} />}
+						leftIcon={<MdOutlinePersonAdd size={20} />}
 						isLoading={loading}
 						loadingText="Loading"
 						spinnerPlacement="start"
@@ -98,10 +107,21 @@ const SignUpForm: React.FC = () => {
 					</Button>
 				</Flex>
 			</form>
+			<Text fontSize="sm">
+				Already have an account?{" "}
+				<Link href="/signin" title="Sign In">
+					<Text as="span" textColor="blue.600">
+						Sign In
+					</Text>
+				</Link>
+			</Text>
 			<Button
 				onClick={async () => {
-					await signUp("bob", "ll@11.com", "123454");
-					push("/account");
+					await signUp("bob", "ll@11.com", "123454").then((res) => {
+						if (res !== null) {
+							push("/account");
+						}
+					});
 				}}>
 				signup with random details
 			</Button>

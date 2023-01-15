@@ -46,12 +46,13 @@ const useFirebase = () => {
 	const users = collection(firestore, "users");
 
 	const signIn = async (email: string, password: string) => {
-		//TODO: make auth functions return a value instead of void
 		try {
 			const { user } = await signInWithEmailAndPassword(auth, email, password);
 			console.log(`[signIn] Signed in! ID: ${user.uid}`);
+			return user;
 		} catch (e) {
 			console.error(`[signIn] Error: ${e}`);
+			return null;
 		}
 	};
 
@@ -68,8 +69,10 @@ const useFirebase = () => {
 			const { user } = await createUserWithEmailAndPassword(auth, email, password);
 			await write(users, { name, email, password, cards: [] }, user.uid);
 			console.log(`[signUp] Signed up! ID: ${user.uid}`);
+			return user;
 		} catch (e) {
 			console.error(`[signUp] Error: ${e}`);
+			return null;
 		}
 	};
 

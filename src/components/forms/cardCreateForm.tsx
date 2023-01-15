@@ -5,6 +5,7 @@ import {
 	FormErrorMessage,
 	FormHelperText,
 	FormLabel,
+	Heading,
 	Input,
 	Select,
 	Text,
@@ -15,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { MdOutlineAddPhotoAlternate, MdOutlinePhoto, MdOutlineCreate } from "react-icons/md";
+import { MdOutlineAddPhotoAlternate, MdOutlinePhoto, MdOutlinePostAdd } from "react-icons/md";
 import useFirebase from "../../hooks/useFirebase";
 import ImageModal from "../imageModal";
 
@@ -52,7 +53,7 @@ const CardCreateForm: React.FC<{
 	const [recipient, setRecipient] = useState<string>(card.recipient);
 	const [sender, setSender] = useState<string>(card.sender);
 	const [message, setMessage] = useState<string>(card.message);
-	const [image, setImage] = useState<File | string | null>(card.image);
+	const [image, setImage] = useState<File | string | undefined>(card.image);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [loading, setLoading] = useState(false);
 
@@ -106,6 +107,9 @@ const CardCreateForm: React.FC<{
 			px={6}
 			py={6}>
 			<ImageModal isOpen={isOpen} onClose={onClose} setImage={setImage} />
+			<Heading fontSize="4xl" textDecor="underline" pb={2}>
+				Card Builder
+			</Heading>
 			<form onSubmit={handleSubmit}>
 				<Flex flexDir="column" gap={2}>
 					<FormControl>
@@ -188,7 +192,7 @@ const CardCreateForm: React.FC<{
 					</FormControl>
 					<Button
 						type="submit"
-						leftIcon={<MdOutlineCreate size={20} />}
+						leftIcon={<MdOutlinePostAdd size={20} />}
 						isLoading={loading}
 						loadingText="Loading"
 						spinnerPlacement="start"

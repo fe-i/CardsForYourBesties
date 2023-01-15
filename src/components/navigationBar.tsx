@@ -41,12 +41,12 @@ const NavigationBar: React.FC = () => {
 			</Link>
 			{user === null ? (
 				<Button rounded="full" variant="ghost" onClick={() => push("/signin")}>
-					<MdOutlineLogin size="2rem" />
+					<MdOutlineLogin size={35} />
 				</Button>
 			) : (
 				<Menu>
 					<MenuButton as={Button} rounded="full" variant="ghost">
-						<MdOutlineAccountCircle size="2rem" />
+						<MdOutlineAccountCircle size={35} />
 					</MenuButton>
 					<MenuList
 						flexDir="column"

@@ -4,22 +4,25 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
 	Input,
 	InputGroup,
 	InputRightElement,
+	Text,
 	useColorModeValue
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { MdOutlineRemoveRedEye, MdOutlineLogin } from "react-icons/md";
+import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineLogin } from "react-icons/md";
+import Link from "next/link";
 import useFirebase from "../../hooks/useFirebase";
 import useAuth from "../../hooks/useAuth";
 
 const SignInForm: React.FC = () => {
 	const { push } = useRouter();
 	const { signIn } = useFirebase();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [email, setEmail] = useState<string | undefined>(undefined);
+	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -28,9 +31,12 @@ const SignInForm: React.FC = () => {
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		setLoading(true);
-		await signIn(e.target[0].value, e.target[1].value);
-		push("/account");
-		setLoading(false);
+		await signIn(e.target[0].value, e.target[1].value).then((res) => {
+			if (res !== null) {
+				push("/account");
+			}
+			setLoading(false);
+		});
 	};
 
 	return (
@@ -43,20 +49,23 @@ const SignInForm: React.FC = () => {
 			gap={2}
 			px={6}
 			py={6}>
+			<Heading fontSize="4xl" textDecor="underline" pb={2}>
+				Sign In
+			</Heading>
 			<form onSubmit={handleSubmit}>
 				<Flex flexDir="column" gap={2}>
-					<FormControl isInvalid={!email} isRequired>
+					<FormControl isInvalid={email === ""} isRequired>
 						<FormLabel>Email</FormLabel>
 						<Input
 							type="email"
 							placeholder="email"
 							maxLength={100}
 							onChange={(e) => setEmail(e.target.value)}
-							value={email}
+							value={email ?? ""}
 						/>
 						<FormErrorMessage>Enter a valid email address.</FormErrorMessage>
 					</FormControl>
-					<FormControl isInvalid={!password} isRequired>
+					<FormControl isInvalid={password === ""} isRequired>
 						<FormLabel>Password</FormLabel>
 						<InputGroup>
 							<Input
@@ -65,11 +74,11 @@ const SignInForm: React.FC = () => {
 								minLength={8}
 								maxLength={50}
 								onChange={(e) => setPassword(e.target.value)}
-								value={password}
+								value={password ?? ""}
 							/>
-							<InputRightElement width="4.5rem">
-								<Button rounded="full" variant="ghost" onClick={handleClick}>
-									<MdOutlineRemoveRedEye size={20} />
+							<InputRightElement>
+								<Button rounded="md" variant="ghost" p={0} onClick={handleClick}>
+									{show ? <MdOutlineVisibilityOff /> : <MdOutlineVisibility />}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
@@ -87,10 +96,24 @@ const SignInForm: React.FC = () => {
 					</Button>
 				</Flex>
 			</form>
+			<Flex flexDir="column" fontSize="sm">
+				<Text textColor="blue.600">Forgot Password?</Text>
+				<Text>
+					Don&apos;t have an account?{" "}
+					<Link href="/signup" title="Sign Up">
+						<Text as="span" textColor="blue.600">
+							Sign Up
+						</Text>
+					</Link>
+				</Text>
+			</Flex>
 			<Button
 				onClick={async () => {
-					await signIn("ll@11.com", "123454");
-					push("/account");
+					await signIn("ll@11.com", "123454").then((res) => {
+						if (res !== null) {
+							push("/account");
+						}
+					});
 				}}>
 				signin with random details
 			</Button>
@@ -100,4 +123,4 @@ const SignInForm: React.FC = () => {
 
 export default SignInForm;
 
-//TODO: remove test button
+//TODO: make forget password a modal, remove test button

@@ -6,15 +6,7 @@ import SignUpForm from "../../components/forms/signUpForm";
 const SignUp: NextPage = () => {
 	return (
 		<Layout title="Sign Up">
-			<Flex
-				flexDir="row"
-				flexWrap="wrap"
-				align="center"
-				justify="center"
-				textAlign="center"
-				fontSize="lg"
-				px={6}
-				py="14vh">
+			<Flex flexDir="column" align="center" justify="center" px={6} py="14vh">
 				<SignUpForm />
 			</Flex>
 		</Layout>
@@ -23,4 +15,4 @@ const SignUp: NextPage = () => {
 
 export default SignUp;
 
-//TODO: link with login form, check login stats and push
+//TODO: check login stats and push, adjust padding after removing test button

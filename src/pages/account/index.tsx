@@ -8,8 +8,8 @@ const Account: NextPage = () => {
 
 	return (
 		<Layout title="Account">
-			<Flex align="center" justify="center" p={6}>
-				<Flex flexDir="row" flexWrap="wrap" fontSize="lg" gap={10}>
+			<Flex flexDir="column" align="center" justify="center" p={6} gap={10}>
+				<Flex>
 					account management stuff (name, email pfp etc) #manage
 					<br />
 					^^ autofill sender name on CardCreateForm && maybe show avatar or something

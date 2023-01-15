@@ -15,10 +15,10 @@ const Card: React.FC<{
 			w={{ base: "90vw", md: "470px" }}
 			px={6}
 			py={6}>
-			<Flex mx={-6} mt={-6} mb={4}>
+			<Flex mx={-6} mt={-6} mb={6}>
 				<Image borderTopRadius="xl" src={image} fallbackSrc="/image.png" alt="Image" />
 			</Flex>
-			<Text whiteSpace="pre-line">
+			<Text fontSize="lg" whiteSpace="pre-line">
 				Dear {recipient},
 				<br />
 				<br />
