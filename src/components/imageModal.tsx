@@ -56,9 +56,7 @@ const ImageModal: React.FC<{ isOpen: boolean; onClose: () => void; setImage: any
 		e.preventDefault();
 		setLoading(true);
 		try {
-			//TODO: possibly does not work
-			const response = await fetch(e.target[0].value, { mode: "no-cors" });
-			const blob = await response.blob();
+			const blob = await fetch(e.target[0].value).then((response) => response.blob());
 			if (!blob.type.startsWith("image/")) throw new Error("Not an image!");
 			setImage(e.target[0].value);
 			toast("Image added from URL!", "success");
