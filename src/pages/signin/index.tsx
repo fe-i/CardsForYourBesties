@@ -1,9 +1,16 @@
 import { Flex } from "@chakra-ui/react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import Layout from "../../components/layout";
 import SignInForm from "../../components/forms/signInForm";
+import useAuth from "../../hooks/useAuth";
 
 const SignIn: NextPage = () => {
+	const { push } = useRouter();
+	const { user } = useAuth();
+
+	if (user !== null) push("/account");
+
 	return (
 		<Layout title="Sign In">
 			<Flex flexDir="column" align="center" justify="center" px={6} py="20vh">
@@ -14,5 +21,3 @@ const SignIn: NextPage = () => {
 };
 
 export default SignIn;
-
-//TODO: check login stats and push, adjust padding after removing test button

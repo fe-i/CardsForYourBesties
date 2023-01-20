@@ -12,11 +12,11 @@ import {
 	TabPanel,
 	Text,
 	FormControl,
+	FormLabel,
 	InputGroup,
 	Input,
 	Button,
-	useToast,
-	FormLabel
+	useToast
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";

@@ -8,15 +8,14 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
+	Link,
 	Text,
 	useColorModeValue
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlinePersonAdd } from "react-icons/md";
-import Link from "next/link";
 import useFirebase from "../../hooks/useFirebase";
-import useAuth from "../../hooks/useAuth";
 
 const SignUpForm: React.FC = () => {
 	const { push } = useRouter();
@@ -107,28 +106,14 @@ const SignUpForm: React.FC = () => {
 					</Button>
 				</Flex>
 			</form>
-			<Text fontSize="sm">
+			<Text>
 				Already have an account?{" "}
-				<Link href="/signin" title="Sign In">
-					<Text as="span" textColor="blue.600">
-						Sign In
-					</Text>
+				<Link href="/signin" title="Sign In" textColor="blue.600">
+					Sign In
 				</Link>
 			</Text>
-			<Button
-				onClick={async () => {
-					await signUp("bob", "ll@11.com", "123454").then((res) => {
-						if (res !== null) {
-							push("/account");
-						}
-					});
-				}}>
-				signup with random details
-			</Button>
 		</Flex>
 	);
 };
 
 export default SignUpForm;
-
-//TODO: remove test button

@@ -82,6 +82,7 @@ const useFirebase = () => {
 			console.log("[resetPassword] Email sent!");
 		} catch (e) {
 			console.error(`[resetPassword] Error: ${e}}`);
+			return null;
 		}
 	};
 

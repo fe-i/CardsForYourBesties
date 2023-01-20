@@ -17,6 +17,7 @@ const Create: NextPage = () => {
 		message: "i love you!",
 		image: ""
 	});
+
 	return (
 		<Layout title="Card Builder">
 			<Flex align="center" justify="center" px={6} py={10}>

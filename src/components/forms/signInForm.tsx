@@ -8,15 +8,16 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
+	Link,
 	Text,
-	useColorModeValue
+	useColorModeValue,
+	useDisclosure
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineLogin } from "react-icons/md";
-import Link from "next/link";
 import useFirebase from "../../hooks/useFirebase";
-import useAuth from "../../hooks/useAuth";
+import PasswordResetModal from "../passwordResetModal";
 
 const SignInForm: React.FC = () => {
 	const { push } = useRouter();
@@ -25,6 +26,7 @@ const SignInForm: React.FC = () => {
 	const [password, setPassword] = useState<string | undefined>(undefined);
 	const [show, setShow] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const handleClick = () => setShow(!show);
 
@@ -49,6 +51,7 @@ const SignInForm: React.FC = () => {
 			gap={2}
 			px={6}
 			py={6}>
+			<PasswordResetModal isOpen={isOpen} onClose={onClose} />
 			<Heading fontSize="4xl" textDecor="underline" pb={2}>
 				Sign In
 			</Heading>
@@ -97,30 +100,20 @@ const SignInForm: React.FC = () => {
 				</Flex>
 			</form>
 			<Flex flexDir="column" fontSize="sm">
-				<Text textColor="blue.600">Forgot Password?</Text>
+				<Text>
+					<Link title="Forgot Password?" textColor="blue.600" onClick={onOpen}>
+						Forgot Password?
+					</Link>
+				</Text>
 				<Text>
 					Don&apos;t have an account?{" "}
-					<Link href="/signup" title="Sign Up">
-						<Text as="span" textColor="blue.600">
-							Sign Up
-						</Text>
+					<Link href="/signup" title="Sign Up" textColor="blue.600">
+						Sign Up
 					</Link>
 				</Text>
 			</Flex>
-			<Button
-				onClick={async () => {
-					await signIn("ll@11.com", "123454").then((res) => {
-						if (res !== null) {
-							push("/account");
-						}
-					});
-				}}>
-				signin with random details
-			</Button>
 		</Flex>
 	);
 };
 
 export default SignInForm;
-
-//TODO: make forget password a modal, remove test button
