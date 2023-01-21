@@ -10,23 +10,36 @@ import {
 	MenuItem
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-/*import {
+import {
 	MdOutlineAccountCircle,
 	MdOutlineArticle,
 	MdOutlineLogin,
 	MdOutlineLogout,
 	MdOutlineSettings
-} from "react-icons/md";*/
+} from "react-icons/md";
 import Link from "next/link";
-/*import useFirebase from "../hooks/useFirebase";
-import useAuth from "../hooks/useAuth";*/
+import useFirebase from "../hooks/useFirebase";
+import useAuth from "../hooks/useAuth";
 
 const NavigationBar: React.FC = () => {
 	const { push } = useRouter();
-	/*const { signOut } = useFirebase();
-	const { user } = useAuth();*/
+	const { signOut } = useFirebase();
+	const { user } = useAuth();
 
-	/*{user === null ? (
+	return (
+		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
+			<Link href="/" title="Home">
+				<Flex gap={2} alignItems="center">
+					<Image w={12} alt="Logo" src="/mail.png" />
+					<Heading
+						display="inline-block"
+						bgGradient="linear(to-r, green.300, green.400)"
+						backgroundClip="text">
+						CFYB
+					</Heading>
+				</Flex>
+			</Link>
+			{user === null ? (
 				<Button rounded="full" variant="ghost" onClick={() => push("/signin")}>
 					<MdOutlineLogin size={35} />
 				</Button>
@@ -59,21 +72,7 @@ const NavigationBar: React.FC = () => {
 						</MenuItem>
 					</MenuList>
 				</Menu>
-			)}*/
-
-	return (
-		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
-			<Link href="/" title="Home">
-				<Flex gap={2} alignItems="center">
-					<Image w={12} alt="Logo" src="/mail.png" />
-					<Heading
-						display="inline-block"
-						bgGradient="linear(to-r, green.300, green.400)"
-						backgroundClip="text">
-						CFYB
-					</Heading>
-				</Flex>
-			</Link>
+			)}
 		</Flex>
 	);
 };
