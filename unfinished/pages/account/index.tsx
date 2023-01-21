@@ -1,9 +1,9 @@
 import { Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Link from "next/link";
-import Layout from "../../components/layout";
-import useAuth from "../../hooks/useAuth";
-import useFirebase from "../../hooks/useFirebase";
+import Layout from "../../src/components/layout";
+import useAuth from "../../src/hooks/useAuth";
+import useFirebase from "../../src/hooks/useFirebase";
 
 const Account: NextPage = () => {
 	const { deleteAccount } = useFirebase();

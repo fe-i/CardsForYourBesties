@@ -1,23 +1,23 @@
 import { Flex } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import Layout from "../../components/layout";
-import SignUpForm from "../../components/forms/signUpForm";
+import Layout from "../../../src/components/layout";
+import SignInForm from "../../../src/components/forms/signInForm";
 import useAuth from "../../hooks/useAuth";
 
-const SignUp: NextPage = () => {
+const SignIn: NextPage = () => {
 	const { push } = useRouter();
 	const { user } = useAuth();
 
 	if (user !== null) push("/account");
 
 	return (
-		<Layout title="Sign Up">
-			<Flex flexDir="column" align="center" justify="center" px={6} py="16vh">
-				<SignUpForm />
+		<Layout title="Sign In">
+			<Flex flexDir="column" align="center" justify="center" px={6} py="20vh">
+				<SignInForm />
 			</Flex>
 		</Layout>
 	);
 };
 
-export default SignUp;
+export default SignIn;

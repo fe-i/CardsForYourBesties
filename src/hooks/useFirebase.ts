@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
-import {
+/*import {
 	getAuth,
 	signInWithEmailAndPassword,
 	signOut as signOutOfAccount,
 	createUserWithEmailAndPassword,
 	sendPasswordResetEmail,
 	deleteUser
-} from "firebase/auth";
+} from "firebase/auth";*/
 import {
 	getFirestore,
 	collection,
@@ -39,11 +39,11 @@ initializeApp({
 });
 
 const useFirebase = () => {
-	const auth = getAuth();
+	//const auth = getAuth();
 	const firestore = getFirestore();
 	const storage = getStorage();
 	const cards = collection(firestore, "cards");
-	const users = collection(firestore, "users");
+	/*const users = collection(firestore, "users");
 
 	const signIn = async (email: string, password: string) => {
 		try {
@@ -97,7 +97,7 @@ const useFirebase = () => {
 		} catch (e) {
 			console.error(`[deleteAccount] Error: ${e}`);
 		}
-	};
+	};*/
 
 	const write = async (colRef: CollectionReference<DocumentData>, data: object, id?: string) => {
 		try {
@@ -143,16 +143,16 @@ const useFirebase = () => {
 	};
 
 	return {
-		auth,
+		//auth,
 		firestore,
 		storage,
 		cards,
-		users,
+		/*users,
 		signIn,
 		signOut,
 		signUp,
 		resetPassword,
-		deleteAccount,
+		deleteAccount,*/
 		write,
 		read,
 		_delete,

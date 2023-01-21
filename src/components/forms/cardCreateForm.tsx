@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { MdOutlineAddPhotoAlternate, MdOutlinePhoto, MdOutlinePostAdd } from "react-icons/md";
 import useFirebase from "../../hooks/useFirebase";
 import ImageModal from "../imageModal";
-import useAuth from "../../hooks/useAuth";
+//import useAuth from "../../../useless/hooks/useAuth";
 
 const options = [
 	{
@@ -50,7 +50,7 @@ const CardCreateForm: React.FC<{
 	setCard: any;
 }> = ({ card, setCard }) => {
 	const { push } = useRouter();
-	const { user } = useAuth();
+	//const { user } = useAuth();
 	const { write, upload, cards } = useFirebase();
 	const [recipient, setRecipient] = useState<string>(card.recipient);
 	const [sender, setSender] = useState<string>(card.sender);
@@ -95,9 +95,8 @@ const CardCreateForm: React.FC<{
 	};
 
 	useEffect(() => {
-		if (user) setSender(user.name);
 		setCard({ recipient, sender, message, image });
-	}, [recipient, sender, message, image, user]);
+	}, [recipient, sender, message, image]);
 
 	return (
 		<Flex

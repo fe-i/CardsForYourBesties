@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlinePersonAdd } from "react-icons/md";
-import useFirebase from "../../hooks/useFirebase";
+import useFirebase from "../../../src/hooks/useFirebase";
 
 const SignUpForm: React.FC = () => {
 	const { push } = useRouter();

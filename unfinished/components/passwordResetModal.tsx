@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdOutlineSend } from "react-icons/md";
-import useFirebase from "../hooks/useFirebase";
+import useFirebase from "../../src/hooks/useFirebase";
 
 const PasswordResetModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 	isOpen,

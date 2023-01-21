@@ -19,12 +19,12 @@ import {
 } from "react-icons/md";
 import Link from "next/link";
 import useFirebase from "../hooks/useFirebase";
-import useAuth from "../hooks/useAuth";
+//import useAuth from "../../useless/hooks/useAuth";
 
 const NavigationBar: React.FC = () => {
 	const { push } = useRouter();
 	const { signOut } = useFirebase();
-	const { user } = useAuth();
+	//const { user } = useAuth();
 
 	return (
 		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
@@ -39,7 +39,9 @@ const NavigationBar: React.FC = () => {
 					</Heading>
 				</Flex>
 			</Link>
-			{user === null ? (
+		</Flex>
+
+		/*{user === null ? (
 				<Button rounded="full" variant="ghost" onClick={() => push("/signin")}>
 					<MdOutlineLogin size={35} />
 				</Button>
@@ -72,8 +74,7 @@ const NavigationBar: React.FC = () => {
 						</MenuItem>
 					</MenuList>
 				</Menu>
-			)}
-		</Flex>
+			)} */
 	);
 };
 

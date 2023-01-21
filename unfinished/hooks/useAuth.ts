@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DocumentData } from "@firebase/firestore";
-import useFirebase from "./useFirebase";
+import useFirebase from "../../src/hooks/useFirebase";
 
 const useAuth = () => {
 	const { auth, read, users } = useFirebase();

@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { MdOutlineVisibility, MdOutlineVisibilityOff, MdOutlineLogin } from "react-icons/md";
 import useFirebase from "../../hooks/useFirebase";
-import PasswordResetModal from "../passwordResetModal";
+import PasswordResetModal from "../../../useless/components/passwordResetModal";
 
 const SignInForm: React.FC = () => {
 	const { push } = useRouter();
