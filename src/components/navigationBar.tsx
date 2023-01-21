@@ -22,9 +22,9 @@ import useFirebase from "../hooks/useFirebase";
 //import useAuth from "../../useless/hooks/useAuth";
 
 const NavigationBar: React.FC = () => {
-	const { push } = useRouter();
+	/*const { push } = useRouter();
 	const { signOut } = useFirebase();
-	//const { user } = useAuth();
+	/const { user } = useAuth();*/
 
 	return (
 		<Flex alignItems="center" justifyContent="space-between" p={5} shadow="md">
