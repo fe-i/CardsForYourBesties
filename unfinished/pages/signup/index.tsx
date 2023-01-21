@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+/*import { Flex } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../src/components/layout";
@@ -21,3 +21,4 @@ const SignUp: NextPage = () => {
 };
 
 export default SignUp;
+*/

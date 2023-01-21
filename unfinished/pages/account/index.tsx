@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Text } from "@chakra-ui/react";
+/*import { Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Link from "next/link";
 import Layout from "../../src/components/layout";
@@ -72,3 +72,4 @@ const Account: NextPage = () => {
 export default Account;
 
 //TODO: make better looking page
+*/

@@ -1,4 +1,4 @@
-import {
+/*import {
 	Button,
 	Flex,
 	FormControl,
@@ -117,3 +117,4 @@ const SignUpForm: React.FC = () => {
 };
 
 export default SignUpForm;
+*/
