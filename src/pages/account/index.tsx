@@ -55,10 +55,9 @@ const Account: NextPage = () => {
 	return (
 		<Layout title="Account">
 			<Flex flexDir="column" align="center" justify="center" p={6} gap={10}>
+				<Text>Welcome {user?.name}!</Text>
 				<Flex>
 					account management stuff (name, email pfp etc) #manage
-					<br />
-					^^ autofill sender name on CardCreateForm && maybe show avatar or something
 					<br />
 					cards gallery here too using tab menu or smth #cards
 					<br />

@@ -3,12 +3,12 @@ import { DocumentData } from "@firebase/firestore";
 import useFirebase from "./useFirebase";
 
 const useAuth = () => {
-	const { auth } = useFirebase();
+	const { auth, read, users } = useFirebase();
 	const [user, setUser] = useState<DocumentData | null>(null);
 
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			if (user) setUser(user);
+		const unsubscribe = auth.onAuthStateChanged(async (user) => {
+			if (user) await read(users, user?.uid).then((data) => setUser(data));
 			else setUser(null);
 		});
 
